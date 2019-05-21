@@ -11,7 +11,7 @@ public class DesktopLauncher {
 		config.title = StrategyGame.GAME_NAME;
 		config.width = StrategyGame.WIDTH;
 		config.height = StrategyGame.HEIGHT;
-		config.resizable = false;
+//		config.resizable = false;
 
 		new LwjglApplication(new StrategyGame(), config);
 	}

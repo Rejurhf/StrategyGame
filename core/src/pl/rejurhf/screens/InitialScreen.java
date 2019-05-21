@@ -1,11 +1,14 @@
 package pl.rejurhf.screens;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import pl.rejurhf.StrategyGame;
+import pl.rejurhf.ui.IClickCallback;
+import pl.rejurhf.ui.SubmitButton;
 
 public class InitialScreen extends AbstractScreen {
-    private Texture bgImg;
+    private Image bgImg;
+    private SubmitButton submitButton;
 
     public InitialScreen(final StrategyGame game){
         super(game);
@@ -13,22 +16,38 @@ public class InitialScreen extends AbstractScreen {
 
     @Override
     protected void init() {
-        bgImg = new Texture("bg\\init_screen_bg.png");
+        initBg();
+        initSubmitButton();
+    }
 
-        Timer.schedule(new Timer.Task() {
+    private void initSubmitButton() {
+        submitButton = new SubmitButton(new IClickCallback() {
             @Override
-            public void run() {
+            public void onClick() {
                 game.setScreen(new GameplayScreen(game));
             }
-        }, 1);
+        });
+
+        stage.addActor(submitButton);
+    }
+
+    // set background
+    private void initBg() {
+        bgImg = new Image(new Texture("bg\\init_screen_bg.png"));
+        stage.addActor(bgImg);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
+        update();
 
         spriteBatch.begin();
-        spriteBatch.draw(bgImg, 0, 0);
+        stage.draw();
         spriteBatch.end();
+    }
+
+    private void update() {
+        stage.act();
     }
 }

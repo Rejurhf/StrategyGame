@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import pl.rejurhf.StrategyGame;
 
 public class GameplayScreen extends AbstractScreen {
-    private Image bgImg, img;
+    private Image bgImg;
 
     public GameplayScreen(StrategyGame game){
         super(game);
@@ -15,6 +15,7 @@ public class GameplayScreen extends AbstractScreen {
     protected void init() {
         initBg();
     }
+
 
     // set background
     private void initBg() {
