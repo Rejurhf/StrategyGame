@@ -40,6 +40,8 @@ public abstract class AbstractScreen implements Screen {
     @Override
     public void render(float delta) {
         clearScreen();
+        camera.update();
+        spriteBatch.setProjectionMatrix(camera.combined);
     }
 
     private void clearScreen(){
