@@ -3,6 +3,7 @@ package pl.rejurhf.screens;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import pl.rejurhf.StrategyGame;
+import pl.rejurhf.constants.UnitConstants;
 import pl.rejurhf.entities.UnitInstance;
 
 import java.util.ArrayList;
@@ -25,6 +26,9 @@ public class GameplayScreen extends AbstractScreen {
     }
 
     private void initCapitols() {
+        //TODO
+        // Add constant size of board to main function
+
         // x max is 49 for it to work properly
         int x = 49;
         // y max is 69 for it to work properly
@@ -43,7 +47,8 @@ public class GameplayScreen extends AbstractScreen {
         // (starting in left top corner, ending in right bottom corner, going row by row)
         for (int i = 49; i >= 0; i--) {
             for (int j = 0; j < 70; j++) {
-                UnitInstance newUnit = new UnitInstance(j*20, i*20, "empty_unit.png");
+                // Create default instances of empty space
+                UnitInstance newUnit = new UnitInstance(j*20, i*20);
                 unitsList.add(newUnit);
                 stage.addActor(unitsList.get(unitsList.size() - 1));
 
