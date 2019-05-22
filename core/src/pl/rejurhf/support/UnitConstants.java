@@ -1,4 +1,4 @@
-package pl.rejurhf.constants;
+package pl.rejurhf.support;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

@@ -3,7 +3,7 @@ package pl.rejurhf.screens;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import pl.rejurhf.StrategyGame;
-import pl.rejurhf.constants.UnitConstants;
+import pl.rejurhf.entities.Race;
 import pl.rejurhf.entities.UnitInstance;
 
 import java.util.ArrayList;
@@ -12,29 +12,30 @@ import java.util.List;
 public class GameplayScreen extends AbstractScreen {
     private Image bgImg;
     private List<UnitInstance> unitsList;
-    private int[][] strategyArray;
+    private List<Race> raceList;
+    public static int[][] strategyArray;
 
-    public GameplayScreen(StrategyGame game){
+    public GameplayScreen(StrategyGame game, int[] capitolArray, ArrayList<String> raceColors){
         super(game);
+        init(capitolArray, raceColors);
+    }
+
+    private void init(int[] capitolArray, ArrayList<String> raceColors) {
+        initBg();
+        initBoard();
+        initRace(capitolArray, raceColors);
     }
 
     @Override
     protected void init() {
-        initBg();
-        initBoard();
-        initCapitols();
     }
 
-    private void initCapitols() {
+    private void initRace(int[] capitolArray, ArrayList<String> raceColors) {
         //TODO
         // Add constant size of board to main function
-
-        // x max is 49 for it to work properly
-        int x = 49;
-        // y max is 69 for it to work properly
-        int y = 69;
-        int boardWidth = 70;
-        unitsList.get(x*boardWidth + y).changeSide();
+        for(int i = 0; i < capitolArray.length; ++i){
+            Race newRace = new Race(unitsList.get(capitolArray[i]), raceColors.get(i), 2*i-1);
+        }
     }
 
     // Board initialization
@@ -47,8 +48,8 @@ public class GameplayScreen extends AbstractScreen {
         // (starting in left top corner, ending in right bottom corner, going row by row)
         for (int i = 49; i >= 0; i--) {
             for (int j = 0; j < 70; j++) {
-                // Create default instances of empty space
-                UnitInstance newUnit = new UnitInstance(j*20, i*20);
+                // Create default instances of empty space (id = 0)
+                UnitInstance newUnit = new UnitInstance(j*20, i*20, 0);
                 unitsList.add(newUnit);
                 stage.addActor(unitsList.get(unitsList.size() - 1));
 

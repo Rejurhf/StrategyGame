@@ -1,8 +1,7 @@
 package pl.rejurhf.entities;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import pl.rejurhf.constants.UnitConstants;
+import pl.rejurhf.support.UnitConstants;
 
 public class UnitInstance extends Image {
     private final static int WIDTH = 20;
@@ -13,8 +12,10 @@ public class UnitInstance extends Image {
     private int STARTING_X;
     private int STARTING_Y;
 
-    public UnitInstance(int x, int y){
+    public UnitInstance(int x, int y, int id){
         super(UnitConstants.getEmptySpaceTexture());
+
+        CAPITOL_ID = 0;
 
         this.setOrigin(WIDTH/2, HEIGHT/2);
         this.setSize(WIDTH, HEIGHT);
@@ -25,7 +26,16 @@ public class UnitInstance extends Image {
         this.setPosition(STARTING_X, STARTING_Y);
     }
 
-    public void changeSide(){
-        this.setDrawable(UnitConstants.getDrawable(UnitConstants.BLUE_CAPITOL));
+    public void changeSide(int id, String capitolColor){
+        CAPITOL_ID = id;
+        this.setDrawable(UnitConstants.getDrawable(capitolColor));
+    }
+
+    public int getXIndex() {
+        return STARTING_X / WIDTH;
+    }
+
+    public int getYIndex() {
+        return STARTING_Y / WIDTH;
     }
 }
