@@ -12,4 +12,11 @@ public class PositionPair {
     public String toString() {
         return "(" + X + "," + Y + ")";
     }
+
+    public boolean equals(PositionPair testedPosition) {
+        if(this.X == testedPosition.X && this.Y == testedPosition.Y)
+            return true;
+
+        return false;
+    }
 }

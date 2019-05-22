@@ -36,22 +36,24 @@ public class GameplayScreen extends AbstractScreen {
         nextButton = new NextButton(new IClickCallback() {
             @Override
             public void onClick() {
-                unitsList.get(1500).changeSide(-1, UnitConstants.MOUNTAIN);
+                for(Race race : raceList){
+                    race.planNextMove();
+                }
+                for(Race race : raceList){
+                    race.executeMovePlan(unitsList);
+                }
             }
         });
 
         stage.addActor(nextButton);
     }
 
-    @Override
-    protected void init() {
-    }
-
     private void initRace(int[] capitolArray, ArrayList<String> raceColors) {
-        //TODO
-        // Add constant size of board to main function
+        raceList = new ArrayList<Race>();
+
         for(int i = 0; i < capitolArray.length; ++i){
-            Race newRace = new Race(unitsList.get(capitolArray[i]), raceColors.get(i), 2*i-1);
+            Race newRace = new Race(unitsList.get(capitolArray[i]), raceColors.get(i), 2*i+1);
+            raceList.add(newRace);
         }
     }
 
@@ -59,19 +61,19 @@ public class GameplayScreen extends AbstractScreen {
     private void initBoard() {
         unitsList = new ArrayList<UnitInstance>();
         // Array for strategy purpose
-        strategyArray = new int[50][70];
+        strategyArray = new int[StrategyGame.BOARD_HEIGHT][StrategyGame.BOARD_WIDTH];
 
         // Populate board, i and j inverted due to more logic insertion to ArrayList
         // (starting in left top corner, ending in right bottom corner, going row by row)
-        for (int i = 49; i >= 0; i--) {
-            for (int j = 0; j < 70; j++) {
+        for (int i = 0; i < StrategyGame.BOARD_HEIGHT; i++) {
+            for (int j = 0; j < StrategyGame.BOARD_WIDTH; j++) {
                 // Create default instances of empty space (id = 0)
-                UnitInstance newUnit = new UnitInstance(j*20, i*20, 0);
+                UnitInstance newUnit = new UnitInstance(j*StrategyGame.UNIT_LEN, i*StrategyGame.UNIT_LEN, 0);
                 unitsList.add(newUnit);
                 stage.addActor(unitsList.get(unitsList.size() - 1));
 
                 // 50-i cause 50th element on screen (top left) is first element in array (top left)
-                strategyArray[49-i][j] = 0;
+                strategyArray[i][j] = 0;
             }
         }
     }
@@ -96,4 +98,7 @@ public class GameplayScreen extends AbstractScreen {
     private void update() {
         stage.act();
     }
+
+    @Override
+    protected void init() { }
 }

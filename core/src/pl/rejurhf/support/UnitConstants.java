@@ -20,6 +20,10 @@ public class UnitConstants {
     public static final String YELLOW_CAPITOL = "units\\yellow_boss.png";
     public static final String YELLOW_UNIT = "units\\yellow_unit.png";
 
+    public static final int EMPTY_SPACE_ID = 0;
+    public static final int MOUNTAIN_ID = -1;
+
+
     private static Texture emptySpaceTexture;
     private static TextureRegionDrawable emptySpace;
     private static TextureRegionDrawable mountain;
