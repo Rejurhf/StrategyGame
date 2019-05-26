@@ -14,9 +14,7 @@ public class PositionPair {
     }
 
     public boolean equals(PositionPair testedPosition) {
-        if(this.X == testedPosition.X && this.Y == testedPosition.Y)
-            return true;
+        return this.X == testedPosition.X && this.Y == testedPosition.Y;
 
-        return false;
     }
 }

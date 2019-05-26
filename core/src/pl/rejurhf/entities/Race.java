@@ -31,19 +31,32 @@ public class Race {
     }
 
     public void planNextMove(){
-        List<PositionPair> possibleMoves = getPossibleMoves();
+        System.out.println("Plan");
+        LinkedList<PositionPair> possibleMoves = getPossibleMoves();
 
-        if(possibleMoves.size()>0){
+        System.out.println("Choose");
+        int breedingAbility = (int)(1 + raceUnitsList.size()/10);
+        if(possibleMoves.size() > breedingAbility){
             Random rand = new Random();
-            int breedingAbility = (int)(1 + raceUnitsList.size()/10);
+
             for (int i = 0; i < breedingAbility; i++) {
-                unitsToClaim.add(possibleMoves.remove(rand.nextInt(possibleMoves.size())));
+                int tmpRand = rand.nextInt(possibleMoves.size());
+                System.out.println(tmpRand);
+                unitsToClaim.add(possibleMoves.remove(tmpRand));
+            }
+        }else if(possibleMoves.size() > 0){
+            Random rand = new Random();
+
+            for (int i = 0; i < possibleMoves.size(); i++) {
+                int tmpRand = rand.nextInt(possibleMoves.size());
+                System.out.println(tmpRand);
+                unitsToClaim.add(possibleMoves.remove(tmpRand));
             }
         }
     }
 
-    private List<PositionPair> getPossibleMoves() {
-        List<PositionPair> possibleMoves = new LinkedList<PositionPair>();
+    private LinkedList<PositionPair> getPossibleMoves() {
+        LinkedList<PositionPair> possibleMoves = new LinkedList<PositionPair>();
 
         // Queue of units to visit starting with capitol
         Queue<PositionPair> unitsToVisit = new LinkedList<PositionPair>();
@@ -127,26 +140,39 @@ public class Race {
 
     private void assignToArray(PositionPair testedPosition, List<PositionPair> possibleMoves,
                                Queue<PositionPair> unitsToVisit, List<PositionPair> visitedUnits) {
-        int testedId = GameplayScreen.strategyArray[testedPosition.X][testedPosition.Y];
+        int testedId = GameplayScreen.strategyArray[testedPosition.Y][testedPosition.X];
 
         if(testedId == UnitConstants.MOUNTAIN_ID){
             return;
         }else if(testedId == ID || testedId == (ID + 1)){
-            if(!visitedUnits.contains(testedPosition) && !unitsToVisit.contains(testedPosition)){
+            if(!positionInArray(visitedUnits, testedPosition) && !positionInArray((List)unitsToVisit, testedPosition)){
+
                 unitsToVisit.add(testedPosition);
             }
         }else if(testedId == UnitConstants.EMPTY_SPACE_ID){
-            if(!possibleMoves.contains(testedPosition)){
+            if(!positionInArray(possibleMoves, testedPosition)){
+
                 possibleMoves.add(testedPosition);
             }
         }
+    }
+
+    public boolean positionInArray(List<PositionPair> array, PositionPair testedPosition){
+        for(PositionPair position : array){
+            if(position.equals(testedPosition))
+                return true;
+        }
+
+        return false;
     }
 
     public void executeMovePlan(List<UnitInstance> unitsList){
         while (unitsToClaim.size() > 0){
             PositionPair claimingUnit = unitsToClaim.remove(unitsToClaim.size()-1);
             int indexNumber = claimingUnit.Y * StrategyGame.BOARD_WIDTH + claimingUnit.X;
+
             System.out.println(ID + " " + claimingUnit.toString() + " " + indexNumber);
+
             unitsList.get(indexNumber).changeSide(ID+1, COLOR);
             raceUnitsList.add(unitsList.get(indexNumber));
         }
