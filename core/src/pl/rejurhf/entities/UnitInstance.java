@@ -34,7 +34,28 @@ public class UnitInstance extends Image {
         STATUS_ID = id;
         GameplayScreen.strategyArray[getYIndex()][getXIndex()] = id;
 
-        this.setDrawable(UnitConstants.getDrawable(capitolColor));
+        String unitColor = "";
+        if(id == -1)
+            unitColor = UnitConstants.MOUNTAIN;
+        else if(id == 0)
+            unitColor = UnitConstants.EMPTY_SPACE;
+        else if(id%2 == 0){
+            if(capitolColor.equals(UnitConstants.BLUE_CAPITOL))
+                unitColor = UnitConstants.BLUE_UNIT;
+            else if(capitolColor.equals(UnitConstants.GREEN_CAPITOL))
+                unitColor = UnitConstants.GREEN_UNIT;
+            else if(capitolColor.equals(UnitConstants.PINK_CAPITOL))
+                unitColor = UnitConstants.PINK_UNIT;
+            else if(capitolColor.equals(UnitConstants.RED_CAPITOL))
+                unitColor = UnitConstants.RED_UNIT;
+            else if(capitolColor.equals(UnitConstants.SEA_CAPITOL))
+                unitColor = UnitConstants.SEA_UNIT;
+            else if(capitolColor.equals(UnitConstants.YELLOW_CAPITOL))
+                unitColor = UnitConstants.YELLOW_UNIT;
+        } else
+            unitColor = capitolColor;
+
+        this.setDrawable(UnitConstants.getDrawable(unitColor));
     }
 
     public void changeSide(int id, String capitolColor, boolean isCapitol){
