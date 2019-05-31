@@ -14,9 +14,10 @@ import java.util.List;
 public class GameplayScreen extends AbstractScreen {
     private Image bgImg;
     private NextButton nextButton;
-    private List<UnitInstance> unitsList;
-    private static List<Race> raceList;
+    public static List<UnitInstance> unitsList;
+    public static List<Race> raceList;
     public static int[][] strategyArray;
+    private int roundCounter = 0;
 
     public GameplayScreen(StrategyGame game, int[] capitolArray, ArrayList<String> raceColors){
         super(game);
@@ -35,6 +36,7 @@ public class GameplayScreen extends AbstractScreen {
         nextButton = new NextButton(new IClickCallback() {
             @Override
             public void onClick() {
+                System.out.println("\nRound: " + ++roundCounter);
                 for(Race race : raceList){
                     race.planNextMove();
                 }

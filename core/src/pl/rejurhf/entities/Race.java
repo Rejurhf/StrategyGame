@@ -12,9 +12,10 @@ public class Race {
     private int ID;
     private int CAPITOL_X_INDEX;
     private int CAPITOL_Y_INDEX;
-    private List<UnitInstance> raceUnitsList;
+    private ArrayList<UnitInstance> raceUnitsList;
     private List<PositionPair> unitsToClaim;
     private String COLOR;
+    private boolean hasCapitol = true;
 
     public Race(UnitInstance unitInstance, String raceColor, int id) {
         // Set variables
@@ -32,7 +33,6 @@ public class Race {
     }
 
     public void planNextMove(){
-        System.out.println("Plan");
 
         // Get possible moves to empty spaces and to enemy units
         LinkedList<PositionPair> possibleMoves = new LinkedList<PositionPair>();
@@ -40,7 +40,13 @@ public class Race {
         assignPossibleMoves(possibleMoves, possibleWarMoves);
 
         // Get breeding ability of race
-        int breedingAbility = (int)(1 + raceUnitsList.size()/10);
+        int breedingAbility = (int)(raceUnitsList.size()/10);
+        if(hasCapitol)
+            breedingAbility += 1;
+
+        if(!hasCapitol)
+            System.out.print("No capitol ");
+        System.out.println(ID + " Breeding ability: " + breedingAbility + " number of units: " + raceUnitsList.size());
 
         // If there is more neighboring empty spaces than breeding ability
         if(possibleMoves.size() >= breedingAbility){
@@ -205,11 +211,49 @@ public class Race {
         while (unitsToClaim.size() > 0){
             PositionPair claimingUnit = unitsToClaim.remove(unitsToClaim.size()-1);
             int indexNumber = claimingUnit.Y * StrategyGame.BOARD_WIDTH + claimingUnit.X;
+            int unitID = GameplayScreen.strategyArray[claimingUnit.Y][claimingUnit.X];
 
-            System.out.println(ID + " " + claimingUnit.toString() + " " + indexNumber);
+//            if(!hasCapitol)
+//                System.out.print("No capitol ");
+//            System.out.println(ID + " claims: " + claimingUnit.toString() + " " + indexNumber + " ID: " + unitID);
 
-            unitsList.get(indexNumber).changeSide(ID+1, COLOR);
-            raceUnitsList.add(unitsList.get(indexNumber));
+            if(unitID == 0){
+                unitsList.get(indexNumber).changeSide(ID+1, COLOR);
+                raceUnitsList.add(unitsList.get(indexNumber));
+            }else if(unitID > 0){
+                // ((unitID+1)/2)-1 eq. (7+1/2-1)=3 which is index in list
+                GameplayScreen.raceList.get(((unitID+1)/2)-1).loseUnit(unitsList.get(indexNumber));
+                unitsList.get(indexNumber).changeSide(ID+1, COLOR);
+                raceUnitsList.add(unitsList.get(indexNumber));
+            }
         }
     }
+
+    public void loseUnit(UnitInstance unit){
+        if(GameplayScreen.strategyArray[unit.getYIndex()][unit.getXIndex()] == ID){
+            hasCapitol = false;
+            return;
+        }
+        for(int i = 0; i < raceUnitsList.size(); ++i){
+            UnitInstance testedUnit = raceUnitsList.get(i);
+            if(testedUnit.equals(unit)){
+                raceUnitsList.remove(i);
+                break;
+            }
+        }
+    }
+
+
+
+    /*
+
+    Getters and Setters
+
+     */
+
+    public int getID() {
+        return ID;
+    }
+
+
 }

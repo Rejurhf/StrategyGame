@@ -25,7 +25,7 @@ public class InitialScreen extends AbstractScreen {
     }
 
     private void initSubmitButton() {
-        final int[] capitolArray = {0, 500 , 1000, 3000};
+        final int[] capitolArray = {144, 204, 2940, 3000};
         final ArrayList<String> colorList = new ArrayList<String>();
         colorList.add(UnitConstants.BLUE_CAPITOL);
         colorList.add(UnitConstants.RED_CAPITOL);

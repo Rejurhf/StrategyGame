@@ -71,4 +71,8 @@ public class UnitInstance extends Image {
     public int getYIndex() {
         return STARTING_Y / StrategyGame.UNIT_LEN;
     }
+
+    public boolean equals(UnitInstance unit){
+        return unit.getXIndex() == this.getXIndex() && unit.getYIndex() == this.getYIndex();
+    }
 }
