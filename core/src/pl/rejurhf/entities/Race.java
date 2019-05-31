@@ -11,6 +11,9 @@ import java.util.*;
 public class Race {
     private int ID;
     private int CAPITOL_X_INDEX;
+
+
+
     private int CAPITOL_Y_INDEX;
     private ArrayList<UnitInstance> raceUnitsList;
     private List<PositionPair> unitsToClaim;
@@ -220,7 +223,15 @@ public class Race {
             if(unitID == 0){
                 unitsList.get(indexNumber).changeSide(ID+1, COLOR);
                 raceUnitsList.add(unitsList.get(indexNumber));
-            }else if(unitID > 0){
+            }else if(unitID > 0 && unitID%2 == 0){
+                // if battle is won claim position
+                if(isVictoryAchieved(unitsList.get(indexNumber))){
+                    // ((unitID+1)/2)-1 eq. (7+1/2-1)=3 which is index in list
+                    GameplayScreen.raceList.get(((unitID+1)/2)-1).loseUnit(unitsList.get(indexNumber));
+                    unitsList.get(indexNumber).changeSide(ID+1, COLOR);
+                    raceUnitsList.add(unitsList.get(indexNumber));
+                }
+            }else {
                 // ((unitID+1)/2)-1 eq. (7+1/2-1)=3 which is index in list
                 GameplayScreen.raceList.get(((unitID+1)/2)-1).loseUnit(unitsList.get(indexNumber));
                 unitsList.get(indexNumber).changeSide(ID+1, COLOR);
@@ -243,6 +254,36 @@ public class Race {
         }
     }
 
+    public boolean isVictoryAchieved(UnitInstance claimingUnit){
+        int indexNumber = claimingUnit.getYIndex() * StrategyGame.BOARD_WIDTH + claimingUnit.getXIndex();
+        int unitID = GameplayScreen.strategyArray[claimingUnit.getYIndex()][claimingUnit.getXIndex()];
+
+        // ((unitID+1)/2)-1 eq. (7+1/2-1)=3 which is index in list
+        int raceIndexInList = ((unitID+1)/2)-1;
+        // max distance
+        int maxDistance = 87;
+        // constant to make max power max value equals 10
+        int constantDiv = 9;
+        
+        int enemyCapitolX = GameplayScreen.raceList.get(raceIndexInList).getCAPITOL_X_INDEX();
+        int enemyCapitolY = GameplayScreen.raceList.get(raceIndexInList).getCAPITOL_Y_INDEX();
+
+        // calculate distance from capitol and divide it by max distance square root/
+        int enemyPower = (int)((maxDistance - (int) Math.sqrt(Math.abs(enemyCapitolX - claimingUnit.getXIndex()) *
+                Math.abs(enemyCapitolX - claimingUnit.getXIndex()) + 
+                Math.abs(enemyCapitolY - claimingUnit.getYIndex()) *
+                Math.abs(enemyCapitolY - claimingUnit.getYIndex()))) / constantDiv) + 1;
+        int thisUnitPower = (int)((maxDistance - (int) Math.sqrt(Math.abs(CAPITOL_X_INDEX - claimingUnit.getXIndex()) *
+                Math.abs(CAPITOL_X_INDEX - claimingUnit.getXIndex()) +
+                Math.abs(CAPITOL_Y_INDEX - claimingUnit.getYIndex()) * 
+                Math.abs(CAPITOL_Y_INDEX - claimingUnit.getYIndex()))) / constantDiv) + 1;
+
+        Random rand = new Random();
+        int tmpRand = rand.nextInt(enemyPower + thisUnitPower);
+
+        return tmpRand >= enemyPower;
+    }
+
 
 
     /*
@@ -255,5 +296,11 @@ public class Race {
         return ID;
     }
 
+    public int getCAPITOL_X_INDEX() {
+        return CAPITOL_X_INDEX;
+    }
 
+    public int getCAPITOL_Y_INDEX() {
+        return CAPITOL_Y_INDEX;
+    }
 }
