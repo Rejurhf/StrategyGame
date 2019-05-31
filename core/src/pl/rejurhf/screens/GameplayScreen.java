@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import pl.rejurhf.StrategyGame;
 import pl.rejurhf.entities.Race;
 import pl.rejurhf.entities.UnitInstance;
-import pl.rejurhf.support.UnitConstants;
 import pl.rejurhf.ui.IClickCallback;
 import pl.rejurhf.ui.NextButton;
 
@@ -16,7 +15,7 @@ public class GameplayScreen extends AbstractScreen {
     private Image bgImg;
     private NextButton nextButton;
     private List<UnitInstance> unitsList;
-    private List<Race> raceList;
+    private static List<Race> raceList;
     public static int[][] strategyArray;
 
     public GameplayScreen(StrategyGame game, int[] capitolArray, ArrayList<String> raceColors){

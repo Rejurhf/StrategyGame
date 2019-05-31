@@ -1,5 +1,6 @@
 package pl.rejurhf.entities;
 
+import javafx.util.Pair;
 import pl.rejurhf.StrategyGame;
 import pl.rejurhf.screens.GameplayScreen;
 import pl.rejurhf.support.PositionPair;
@@ -32,31 +33,53 @@ public class Race {
 
     public void planNextMove(){
         System.out.println("Plan");
-        LinkedList<PositionPair> possibleMoves = getPossibleMoves();
 
-        System.out.println("Choose");
+        // Get possible moves to empty spaces and to enemy units
+        LinkedList<PositionPair> possibleMoves = new LinkedList<PositionPair>();
+        LinkedList<Pair<Integer, PositionPair>> possibleWarMoves = new LinkedList<Pair<Integer, PositionPair>>();
+        assignPossibleMoves(possibleMoves, possibleWarMoves);
+
+        // Get breeding ability of race
         int breedingAbility = (int)(1 + raceUnitsList.size()/10);
-        if(possibleMoves.size() > breedingAbility){
+
+        // If there is more neighboring empty spaces than breeding ability
+        if(possibleMoves.size() >= breedingAbility){
             Random rand = new Random();
 
             for (int i = 0; i < breedingAbility; i++) {
                 int tmpRand = rand.nextInt(possibleMoves.size());
-                System.out.println(tmpRand);
                 unitsToClaim.add(possibleMoves.remove(tmpRand));
             }
-        }else if(possibleMoves.size() > 0){
+
+        // if breeding ability greater than number of empty spaces in neighborhood
+        }else if(possibleMoves.size() > 0 || possibleWarMoves.size() > 0){
             Random rand = new Random();
 
             for (int i = 0; i < possibleMoves.size(); i++) {
                 int tmpRand = rand.nextInt(possibleMoves.size());
-                System.out.println(tmpRand);
                 unitsToClaim.add(possibleMoves.remove(tmpRand));
+            }
+
+            // If enemy neighbor units number greater than breeding ability
+            if(possibleWarMoves.size() >= (breedingAbility - possibleMoves.size())){
+                for (int i = 0; i < (breedingAbility - possibleMoves.size()); ++i){
+                    int tmpRand = rand.nextInt(possibleWarMoves.size());
+                    unitsToClaim.add(possibleWarMoves.remove(tmpRand).getValue());
+                }
+
+            // If enemy neighbor units number smaller than breeding ability
+            }else{
+                for (int i = 0; i < possibleWarMoves.size(); ++i){
+                    int tmpRand = rand.nextInt(possibleWarMoves.size());
+                    unitsToClaim.add(possibleWarMoves.remove(tmpRand).getValue());
+                }
             }
         }
     }
 
-    private LinkedList<PositionPair> getPossibleMoves() {
-        LinkedList<PositionPair> possibleMoves = new LinkedList<PositionPair>();
+    private void assignPossibleMoves(LinkedList<PositionPair> possibleMoves,
+                                     LinkedList<Pair<Integer, PositionPair>> possibleWarMoves) {
+//        LinkedList<PositionPair> possibleMoves = new LinkedList<PositionPair>();
 
         // Queue of units to visit starting with capitol
         Queue<PositionPair> unitsToVisit = new LinkedList<PositionPair>();
@@ -71,74 +94,75 @@ public class Race {
             if(currentPosition.X == 0){
                 if(currentPosition.Y == 0){
                     assignToArray(new PositionPair(currentPosition.X, currentPosition.Y+1),
-                            possibleMoves, unitsToVisit, visitedUnits);
+                            possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                     assignToArray(new PositionPair(currentPosition.X+1, currentPosition.Y),
-                            possibleMoves, unitsToVisit, visitedUnits);
+                            possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                 }else if(currentPosition.Y == StrategyGame.BOARD_HEIGHT-1){
                     assignToArray(new PositionPair(currentPosition.X, currentPosition.Y-1),
-                            possibleMoves, unitsToVisit, visitedUnits);
+                            possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                     assignToArray(new PositionPair(currentPosition.X+1, currentPosition.Y),
-                            possibleMoves, unitsToVisit, visitedUnits);
+                            possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                 }else{
                     assignToArray(new PositionPair(currentPosition.X, currentPosition.Y-1),
-                            possibleMoves, unitsToVisit, visitedUnits);
+                            possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                     assignToArray(new PositionPair(currentPosition.X, currentPosition.Y+1),
-                            possibleMoves, unitsToVisit, visitedUnits);
+                            possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                     assignToArray(new PositionPair(currentPosition.X+1, currentPosition.Y),
-                            possibleMoves, unitsToVisit, visitedUnits);
+                            possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                 }
             }else if(currentPosition.X == StrategyGame.BOARD_WIDTH-1){
                 if(currentPosition.Y == 0){
                     assignToArray(new PositionPair(currentPosition.X, currentPosition.Y+1),
-                            possibleMoves, unitsToVisit, visitedUnits);
+                            possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                     assignToArray(new PositionPair(currentPosition.X-1, currentPosition.Y),
-                            possibleMoves, unitsToVisit, visitedUnits);
+                            possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                 }else if(currentPosition.Y == StrategyGame.BOARD_HEIGHT-1){
                     assignToArray(new PositionPair(currentPosition.X, currentPosition.Y-1),
-                            possibleMoves, unitsToVisit, visitedUnits);
+                            possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                     assignToArray(new PositionPair(currentPosition.X-1, currentPosition.Y),
-                            possibleMoves, unitsToVisit, visitedUnits);
+                            possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                 }else{
                     assignToArray(new PositionPair(currentPosition.X, currentPosition.Y-1),
-                            possibleMoves, unitsToVisit, visitedUnits);
+                            possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                     assignToArray(new PositionPair(currentPosition.X, currentPosition.Y+1),
-                            possibleMoves, unitsToVisit, visitedUnits);
+                            possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                     assignToArray(new PositionPair(currentPosition.X-1, currentPosition.Y),
-                            possibleMoves, unitsToVisit, visitedUnits);
+                            possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                 }
             }else if(currentPosition.Y == 0){
                 // Previous cases covered corner options, thus only edge is checked
                 assignToArray(new PositionPair(currentPosition.X, currentPosition.Y+1),
-                        possibleMoves, unitsToVisit, visitedUnits);
+                        possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                 assignToArray(new PositionPair(currentPosition.X-1, currentPosition.Y),
-                        possibleMoves, unitsToVisit, visitedUnits);
+                        possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                 assignToArray(new PositionPair(currentPosition.X+1, currentPosition.Y),
-                        possibleMoves, unitsToVisit, visitedUnits);
+                        possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
 
             }else if(currentPosition.Y == StrategyGame.BOARD_HEIGHT-1){
                 assignToArray(new PositionPair(currentPosition.X, currentPosition.Y-1),
-                        possibleMoves, unitsToVisit, visitedUnits);
+                        possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                 assignToArray(new PositionPair(currentPosition.X-1, currentPosition.Y),
-                        possibleMoves, unitsToVisit, visitedUnits);
+                        possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                 assignToArray(new PositionPair(currentPosition.X+1, currentPosition.Y),
-                        possibleMoves, unitsToVisit, visitedUnits);
+                        possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
 
             }else{
                 assignToArray(new PositionPair(currentPosition.X, currentPosition.Y-1),
-                        possibleMoves, unitsToVisit, visitedUnits);
+                        possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                 assignToArray(new PositionPair(currentPosition.X, currentPosition.Y+1),
-                        possibleMoves, unitsToVisit, visitedUnits);
+                        possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                 assignToArray(new PositionPair(currentPosition.X-1, currentPosition.Y),
-                        possibleMoves, unitsToVisit, visitedUnits);
+                        possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
                 assignToArray(new PositionPair(currentPosition.X+1, currentPosition.Y),
-                        possibleMoves, unitsToVisit, visitedUnits);
+                        possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
             }
         }
 
-        return possibleMoves;
+//        return possibleMoves;
     }
 
     private void assignToArray(PositionPair testedPosition, List<PositionPair> possibleMoves,
+                               LinkedList<Pair<Integer, PositionPair>> possibleWarMoves,
                                Queue<PositionPair> unitsToVisit, List<PositionPair> visitedUnits) {
         int testedId = GameplayScreen.strategyArray[testedPosition.Y][testedPosition.X];
 
@@ -146,13 +170,15 @@ public class Race {
             return;
         }else if(testedId == ID || testedId == (ID + 1)){
             if(!positionInArray(visitedUnits, testedPosition) && !positionInArray((List)unitsToVisit, testedPosition)){
-
                 unitsToVisit.add(testedPosition);
             }
         }else if(testedId == UnitConstants.EMPTY_SPACE_ID){
             if(!positionInArray(possibleMoves, testedPosition)){
-
                 possibleMoves.add(testedPosition);
+            }
+        }else if(testedId > 0){
+            if(!positionInArrayWar(possibleWarMoves, testedPosition)){
+                possibleWarMoves.add(new Pair<Integer, PositionPair>(testedId, testedPosition));
             }
         }
     }
@@ -160,6 +186,15 @@ public class Race {
     public boolean positionInArray(List<PositionPair> array, PositionPair testedPosition){
         for(PositionPair position : array){
             if(position.equals(testedPosition))
+                return true;
+        }
+
+        return false;
+    }
+
+    public boolean positionInArrayWar(LinkedList<Pair<Integer, PositionPair>> array, PositionPair testedPosition){
+        for(Pair pair : array){
+            if(pair.getValue().equals(testedPosition))
                 return true;
         }
 

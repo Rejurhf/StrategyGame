@@ -25,11 +25,12 @@ public class InitialScreen extends AbstractScreen {
     }
 
     private void initSubmitButton() {
-        final int[] capitolArray = {0, 500 , 1000};
+        final int[] capitolArray = {0, 500 , 1000, 3000};
         final ArrayList<String> colorList = new ArrayList<String>();
         colorList.add(UnitConstants.BLUE_CAPITOL);
         colorList.add(UnitConstants.RED_CAPITOL);
         colorList.add(UnitConstants.GREEN_CAPITOL);
+        colorList.add(UnitConstants.PINK_CAPITOL);
 
         submitButton = new SubmitButton(new IClickCallback() {
             @Override
