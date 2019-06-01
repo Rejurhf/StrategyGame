@@ -14,7 +14,6 @@ public class UnitInstance extends Image {
     private int STATUS_ID;
     private int STARTING_X;
     private int STARTING_Y;
-
     public UnitInstance(int x, int y, int id){
         super(UnitConstants.getEmptySpaceTexture());
 
@@ -81,17 +80,21 @@ public class UnitInstance extends Image {
     }
 
 
+
     /*
 
     Getters and Setters
 
      */
-
     public int getXIndex() {
         return STARTING_X / StrategyGame.UNIT_LEN;
     }
 
     public int getYIndex() {
         return STARTING_Y / StrategyGame.UNIT_LEN;
+    }
+
+    public int getSTATUS_ID() {
+        return STATUS_ID;
     }
 }

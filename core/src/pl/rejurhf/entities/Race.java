@@ -14,6 +14,7 @@ public class Race {
     private int CAPITOL_Y_INDEX;
     private ArrayList<UnitInstance> raceUnitsList;
     private List<PositionPair> unitsToClaim;
+    private List<Integer> enemyList;
     private String COLOR;
     private boolean hasCapitol = true;
     private int toSpawnCapitolCount = 5;
@@ -31,6 +32,7 @@ public class Race {
         // Initialize race unit list
         raceUnitsList = new ArrayList<UnitInstance>();
         unitsToClaim = new ArrayList<PositionPair>();
+        enemyList = new ArrayList<Integer>();
 
         raceUnitsList.add(unitInstance);
     }
@@ -194,7 +196,7 @@ public class Race {
             if(!positionInArray(possibleMoves, testedPosition)){
                 possibleMoves.add(testedPosition);
             }
-        }else if(testedId > 0){
+        }else if(testedId > 0 && enemyList.contains(testedId)){
             if(!positionInArrayWar(possibleWarMoves, testedPosition)){
                 possibleWarMoves.add(new Pair<Integer, PositionPair>(testedId, testedPosition));
             }
@@ -230,21 +232,26 @@ public class Race {
 //            System.out.println(ID + " claims: " + claimingUnit.toString() + " " + indexNumber + " ID: " + unitID);
 
             if(unitID == 0){
+                // Claim empty space
                 unitsList.get(indexNumber).changeSide(ID+1, COLOR);
                 raceUnitsList.add(unitsList.get(indexNumber));
             }else if(unitID > 0 && unitID%2 == 0){
-                // if battle is won claim position
-                if(isVictoryAchieved(unitsList.get(indexNumber))){
+                // Claim enemy unit
+                // if battle is won claim position and if this is an enemy
+                if(isVictoryAchieved(unitsList.get(indexNumber)) && enemyList.contains(unitID)){
                     // ((unitID+1)/2)-1 eq. (7+1/2-1)=3 which is index in list
-                    GameplayScreen.raceList.get(((unitID+1)/2)-1).loseUnit(unitsList.get(indexNumber));
+                    GameplayScreen.raceList.get(((unitID+1)/2)-1).loseUnit(unitsList.get(indexNumber), ID);
                     unitsList.get(indexNumber).changeSide(ID+1, COLOR);
                     raceUnitsList.add(unitsList.get(indexNumber));
                 }
             }else {
-                // ((unitID+1)/2)-1 eq. (7+1/2-1)=3 which is index in list
-                GameplayScreen.raceList.get(((unitID+1)/2)-1).loseUnit(unitsList.get(indexNumber));
-                unitsList.get(indexNumber).changeSide(ID+1, COLOR);
-                raceUnitsList.add(unitsList.get(indexNumber));
+                // Claim enemy capitol if this is an enemy
+                if(enemyList.contains(unitID)){
+                    // ((unitID+1)/2)-1 eq. (7+1/2-1)=3 which is index in list
+                    GameplayScreen.raceList.get(((unitID+1)/2)-1).loseUnit(unitsList.get(indexNumber), ID);
+                    unitsList.get(indexNumber).changeSide(ID+1, COLOR);
+                    raceUnitsList.add(unitsList.get(indexNumber));
+                }
             }
         }
     }
@@ -269,7 +276,7 @@ public class Race {
         }
     }
 
-    public void loseUnit(UnitInstance unit){
+    public void loseUnit(UnitInstance unit, int enemyID){
         // if capitol lose capitol
         if(GameplayScreen.strategyArray[unit.getYIndex()][unit.getXIndex()] == ID){
             hasCapitol = false;
@@ -282,10 +289,28 @@ public class Race {
                 break;
             }
         }
+
+        // if new enemy add to enemy list
+        addRaceToEnemyList(enemyID);
+    }
+
+    // Add capitol and unit as enemy
+    private void addRaceToEnemyList(int enemyID) {
+        if(!enemyList.contains(enemyID)){
+            enemyList.add(enemyID);
+            enemyList.add(enemyID+1);
+        }
+    }
+
+    private void removeRaceFromEnemyList(int enemyID) {
+        if(enemyList.contains(enemyID)){
+            enemyList.remove(enemyID);
+            enemyList.remove((enemyID+1));
+        }
     }
 
     public boolean isVictoryAchieved(UnitInstance claimingUnit){
-        int indexNumber = claimingUnit.getYIndex() * StrategyGame.BOARD_WIDTH + claimingUnit.getXIndex();
+//        int indexNumber = claimingUnit.getYIndex() * StrategyGame.BOARD_WIDTH + claimingUnit.getXIndex();
         int unitID = GameplayScreen.strategyArray[claimingUnit.getYIndex()][claimingUnit.getXIndex()];
 
         // ((unitID+1)/2)-1 eq. (7+1/2-1)=3 which is index in list
