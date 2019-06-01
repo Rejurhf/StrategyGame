@@ -26,10 +26,12 @@ public class InitialScreen extends AbstractScreen {
 
     private void initSubmitButton() {
         // Array with location on the board
-        final int[] capitolArray = {StrategyGame.BOARD_WIDTH + 3,
-                StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH - 5,
-                (StrategyGame.BOARD_HEIGHT - 2) * StrategyGame.BOARD_WIDTH + 12,
-                (StrategyGame.BOARD_HEIGHT - 2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH - 1};
+        final int[] capitolArray = {(StrategyGame.BOARD_HEIGHT/2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 -12,
+                (StrategyGame.BOARD_HEIGHT/2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 6,
+                (StrategyGame.BOARD_HEIGHT/2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2,
+                (StrategyGame.BOARD_HEIGHT/2 + 2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2,
+                (StrategyGame.BOARD_HEIGHT/2 + 2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 6,
+                (StrategyGame.BOARD_HEIGHT/2 + 2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 12};
 
         // Array with color of races
         final ArrayList<String> colorList = new ArrayList<String>();
@@ -37,6 +39,8 @@ public class InitialScreen extends AbstractScreen {
         colorList.add(UnitConstants.RED_CAPITOL);
         colorList.add(UnitConstants.GREEN_CAPITOL);
         colorList.add(UnitConstants.PINK_CAPITOL);
+        colorList.add(UnitConstants.SEA_CAPITOL);
+        colorList.add(UnitConstants.YELLOW_CAPITOL);
 
         submitButton = new SubmitButton(new IClickCallback() {
             @Override

@@ -17,7 +17,14 @@ public class Race {
     private List<Integer> enemyList;
     private String COLOR;
     private boolean hasCapitol = true;
-    private int toSpawnCapitolCount = 5;
+
+    // Race specific const
+    private int toSpawnCapitolCount;
+    private int spawnCapitolConst;
+    private int breedingFromUnitConst;
+    private int breedingFromCapitolConst;
+    private int unitPowerConst;
+    private boolean isPowerFromCapitolDependent;
 
     public Race(UnitInstance unitInstance, String raceColor, int id) {
         // Set variables
@@ -36,16 +43,25 @@ public class Race {
 
         raceUnitsList.add(unitInstance);
 
+        // Add race constants
+        spawnCapitolConst = 5;
+        toSpawnCapitolCount = spawnCapitolConst;
+        breedingFromUnitConst = 20;
+        breedingFromCapitolConst = 1;
+        unitPowerConst = 1;
+        isPowerFromCapitolDependent = true;
+
         //TODO remove adding this to enemy list
         addRaceToEnemyList(1);
         addRaceToEnemyList(3);
         addRaceToEnemyList(5);
         addRaceToEnemyList(7);
+        addRaceToEnemyList(9);
+        addRaceToEnemyList(11);
         removeRaceFromEnemyList(ID);
     }
 
     public void planNextMove(){
-
         // Get possible moves to empty spaces and to enemy units
         LinkedList<PositionPair> possibleMoves = new LinkedList<PositionPair>();
         LinkedList<Pair<Integer, PositionPair>> possibleWarMoves = new LinkedList<Pair<Integer, PositionPair>>();
@@ -54,10 +70,10 @@ public class Race {
         // Get breeding ability of race
         int breedingAbility = 0;
         if(hasCapitol) {
-            breedingAbility = (int) (raceUnitsList.size() / 10) + 1;
-        }else if(raceUnitsList.size() > 20){
+            breedingAbility = (int) (raceUnitsList.size() / breedingFromUnitConst) + breedingFromCapitolConst;
+        }else if(raceUnitsList.size() > 10){
             // if no capitol count to capitol rebuild
-            breedingAbility = (int) (raceUnitsList.size() / 20);
+            breedingAbility = (int) (raceUnitsList.size() / (2*breedingFromUnitConst));
             toSpawnCapitolCount--;
             if(toSpawnCapitolCount == 0){
                 this.makeNewCapitol();
@@ -65,9 +81,15 @@ public class Race {
         }
 
         // Info text
-        if(!hasCapitol)
-            System.out.print("No capitol ");
-        System.out.println(ID + " Breeding ability: " + breedingAbility + " number of units: " + raceUnitsList.size());
+        if(raceUnitsList.size() == 0){
+            System.out.println("Race " + ID + " is dead");
+        }else{
+            if(!hasCapitol)
+                System.out.print("No capitol ");
+            System.out.println(ID + ": Possible moves: " + possibleMoves.size() +
+                    " Possible war moves: " + possibleWarMoves.size() + " breeding ability: " + breedingAbility +
+                    " number of units: " + raceUnitsList.size());
+        }
 
         // If there is more neighboring empty spaces than breeding ability
         if(possibleMoves.size() >= breedingAbility){
@@ -234,10 +256,6 @@ public class Race {
             int indexNumber = claimingUnit.Y * StrategyGame.BOARD_WIDTH + claimingUnit.X;
             int unitID = GameplayScreen.strategyArray[claimingUnit.Y][claimingUnit.X];
 
-//            if(!hasCapitol)
-//                System.out.print("No capitol ");
-//            System.out.println(ID + " claims: " + claimingUnit.toString() + " " + indexNumber + " ID: " + unitID);
-
             if(unitID == 0){
                 // Claim empty space
                 unitsList.get(indexNumber).changeSide(ID+1, COLOR);
@@ -274,7 +292,7 @@ public class Race {
     private void makeNewCapitol() {
         if(!hasCapitol){
             hasCapitol = true;
-            toSpawnCapitolCount = 5;
+            toSpawnCapitolCount = spawnCapitolConst;
 
             // chose random unit from unit list
             Random rand = new Random();
@@ -330,23 +348,10 @@ public class Race {
 
         // ((unitID+1)/2)-1 eq. (7+1/2-1)=3 which is index in list
         int raceIndexInList = ((unitID+1)/2)-1;
-        // max distance
-        int maxDistance = 87;
-        // constant to make max power max value equals 10
-        int constantDiv = 9;
-
-        int enemyCapitolX = GameplayScreen.raceList.get(raceIndexInList).getCAPITOL_X_INDEX();
-        int enemyCapitolY = GameplayScreen.raceList.get(raceIndexInList).getCAPITOL_Y_INDEX();
 
         // calculate distance from capitol and divide it by max distance square root/
-        int enemyPower = (int)((maxDistance - (int) Math.sqrt(Math.abs(enemyCapitolX - claimingUnit.getXIndex()) *
-                Math.abs(enemyCapitolX - claimingUnit.getXIndex()) +
-                Math.abs(enemyCapitolY - claimingUnit.getYIndex()) *
-                Math.abs(enemyCapitolY - claimingUnit.getYIndex()))) / constantDiv) + 1;
-        int thisUnitPower = (int)((maxDistance - (int) Math.sqrt(Math.abs(CAPITOL_X_INDEX - claimingUnit.getXIndex()) *
-                Math.abs(CAPITOL_X_INDEX - claimingUnit.getXIndex()) +
-                Math.abs(CAPITOL_Y_INDEX - claimingUnit.getYIndex()) *
-                Math.abs(CAPITOL_Y_INDEX - claimingUnit.getYIndex()))) / constantDiv) + 1;
+        int enemyPower = GameplayScreen.raceList.get(raceIndexInList).calculateUnitPower(claimingUnit);
+        int thisUnitPower = this.calculateUnitPower(claimingUnit);
 
         Random rand = new Random();
         int tmpRand = rand.nextInt(enemyPower + thisUnitPower);
@@ -354,7 +359,27 @@ public class Race {
         return tmpRand >= enemyPower;
     }
 
+    public int calculateUnitPower(UnitInstance claimingUnit){
+        // max distance
+        int maxDistance = 87;
+        // constant to make max power max value equals 10
+        int constantDiv = 9;
+        int power = 0;
 
+        if(isPowerFromCapitolDependent){
+            power = (int)((maxDistance - (int) Math.sqrt(Math.abs(CAPITOL_X_INDEX - claimingUnit.getXIndex()) *
+                    Math.abs(CAPITOL_X_INDEX - claimingUnit.getXIndex()) +
+                    Math.abs(CAPITOL_Y_INDEX - claimingUnit.getYIndex()) *
+                            Math.abs(CAPITOL_Y_INDEX - claimingUnit.getYIndex()))) / constantDiv) + unitPowerConst;
+        }else{
+            power = (int) (87 / 9) + unitPowerConst;
+        }
+
+        if(power < 1)
+            return 1;
+
+        return power;
+    }
 
 
     /*
