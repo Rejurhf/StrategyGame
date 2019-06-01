@@ -35,6 +35,13 @@ public class Race {
         enemyList = new ArrayList<Integer>();
 
         raceUnitsList.add(unitInstance);
+
+        //TODO remove adding this to enemy list
+        addRaceToEnemyList(1);
+        addRaceToEnemyList(3);
+        addRaceToEnemyList(5);
+        addRaceToEnemyList(7);
+        removeRaceFromEnemyList(ID);
     }
 
     public void planNextMove(){
@@ -245,8 +252,8 @@ public class Race {
                     raceUnitsList.add(unitsList.get(indexNumber));
                 }
             }else {
-                // Claim enemy capitol if this is an enemy
-                if(enemyList.contains(unitID)){
+                // Claim enemy capitol if this is an enemy, battle is won and you are lucky
+                if(enemyList.contains(unitID) && isVictoryAchieved(unitsList.get(indexNumber)) && capitolClaimingLuck()){
                     // ((unitID+1)/2)-1 eq. (7+1/2-1)=3 which is index in list
                     GameplayScreen.raceList.get(((unitID+1)/2)-1).loseUnit(unitsList.get(indexNumber), ID);
                     unitsList.get(indexNumber).changeSide(ID+1, COLOR);
@@ -254,6 +261,14 @@ public class Race {
                 }
             }
         }
+    }
+
+    // randomly chose if capitol can by taken
+    private boolean capitolClaimingLuck() {
+        // if random number is equals to 1 you can claim capitol
+        Random rand = new Random();
+        int tmpRand = rand.nextInt(5);
+        return tmpRand == 1;
     }
 
     private void makeNewCapitol() {
@@ -304,8 +319,8 @@ public class Race {
 
     private void removeRaceFromEnemyList(int enemyID) {
         if(enemyList.contains(enemyID)){
-            enemyList.remove(enemyID);
-            enemyList.remove((enemyID+1));
+            enemyList.remove(enemyList.indexOf(enemyID));
+            enemyList.remove(enemyList.indexOf(enemyID+1));
         }
     }
 
