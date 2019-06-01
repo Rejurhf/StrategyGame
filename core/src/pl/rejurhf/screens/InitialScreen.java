@@ -26,12 +26,12 @@ public class InitialScreen extends AbstractScreen {
 
     private void initSubmitButton() {
         // Array with location on the board
-        final int[] capitolArray = {(StrategyGame.BOARD_HEIGHT/2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 -12,
-                (StrategyGame.BOARD_HEIGHT/2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 6,
-                (StrategyGame.BOARD_HEIGHT/2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2,
-                (StrategyGame.BOARD_HEIGHT/2 + 2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2,
-                (StrategyGame.BOARD_HEIGHT/2 + 2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 6,
-                (StrategyGame.BOARD_HEIGHT/2 + 2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 12};
+        final int[] capitolArray = {(StrategyGame.BOARD_HEIGHT/2 - 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 2,
+                (StrategyGame.BOARD_HEIGHT/2 - 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2,
+                (StrategyGame.BOARD_HEIGHT/2 - 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 2,
+                (StrategyGame.BOARD_HEIGHT/2 + 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 2,
+                (StrategyGame.BOARD_HEIGHT/2 + 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2,
+                (StrategyGame.BOARD_HEIGHT/2 + 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 2};
 
         // Array with color of races
         final ArrayList<String> colorList = new ArrayList<String>();

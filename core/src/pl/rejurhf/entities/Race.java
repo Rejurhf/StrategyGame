@@ -82,13 +82,13 @@ public class Race {
 
         // Info text
         if(raceUnitsList.size() == 0){
-            System.out.println("Race " + ID + " is dead");
+            System.out.println("Race " + ID + " " + UnitConstants.getColorName(COLOR) + " is dead");
         }else{
             if(!hasCapitol)
                 System.out.print("No capitol ");
-            System.out.println(ID + ": Possible moves: " + possibleMoves.size() +
-                    " Possible war moves: " + possibleWarMoves.size() + " breeding ability: " + breedingAbility +
-                    " number of units: " + raceUnitsList.size());
+            System.out.println(ID + " " + UnitConstants.getColorName(COLOR) +
+                    ": Moves: " + possibleMoves.size() + " War moves: " + possibleWarMoves.size() +
+                    " Breeding: " + breedingAbility + " Units: " + raceUnitsList.size());
         }
 
         // If there is more neighboring empty spaces than breeding ability
@@ -372,7 +372,7 @@ public class Race {
                     Math.abs(CAPITOL_Y_INDEX - claimingUnit.getYIndex()) *
                             Math.abs(CAPITOL_Y_INDEX - claimingUnit.getYIndex()))) / constantDiv) + unitPowerConst;
         }else{
-            power = (int) (87 / 9) + unitPowerConst;
+            power = (int) (87 / 9)/2 + unitPowerConst;
         }
 
         if(power < 1)

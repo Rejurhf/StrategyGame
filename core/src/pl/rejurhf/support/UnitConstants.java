@@ -120,4 +120,21 @@ public class UnitConstants {
         }else
             return null;
     }
+
+    public static String getColorName(String color){
+        if(color.equals(BLUE_CAPITOL) || color.equals(BLUE_UNIT))
+            return "BLUE";
+        else if(color.equals(GREEN_CAPITOL) || color.equals(GREEN_UNIT))
+            return "GREEN";
+        else if(color.equals(PINK_CAPITOL) || color.equals(PINK_UNIT))
+            return "PINK";
+        else if(color.equals(RED_CAPITOL) || color.equals(RED_UNIT))
+            return "RED";
+        else if(color.equals(SEA_CAPITOL) || color.equals(SEA_UNIT))
+            return "SEA";
+        else if(color.equals(YELLOW_CAPITOL) || color.equals(YELLOW_UNIT))
+            return "YELLOW";
+
+        return "this is not supported color";
+    }
 }
