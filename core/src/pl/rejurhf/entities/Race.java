@@ -11,14 +11,12 @@ import java.util.*;
 public class Race {
     private int ID;
     private int CAPITOL_X_INDEX;
-
-
-
     private int CAPITOL_Y_INDEX;
     private ArrayList<UnitInstance> raceUnitsList;
     private List<PositionPair> unitsToClaim;
     private String COLOR;
     private boolean hasCapitol = true;
+    private int toSpawnCapitolCount = 5;
 
     public Race(UnitInstance unitInstance, String raceColor, int id) {
         // Set variables
@@ -28,11 +26,13 @@ public class Race {
         CAPITOL_Y_INDEX = unitInstance.getYIndex();
 
         // Change UnitInstance to Capitol
-        unitInstance.changeSide(ID, raceColor, true);
+        unitInstance.changeSide(ID, COLOR, true);
 
         // Initialize race unit list
         raceUnitsList = new ArrayList<UnitInstance>();
         unitsToClaim = new ArrayList<PositionPair>();
+
+        raceUnitsList.add(unitInstance);
     }
 
     public void planNextMove(){
@@ -43,10 +43,19 @@ public class Race {
         assignPossibleMoves(possibleMoves, possibleWarMoves);
 
         // Get breeding ability of race
-        int breedingAbility = (int)(raceUnitsList.size()/10);
-        if(hasCapitol)
-            breedingAbility += 1;
+        int breedingAbility = 0;
+        if(hasCapitol) {
+            breedingAbility = (int) (raceUnitsList.size() / 10) + 1;
+        }else if(raceUnitsList.size() > 20){
+            // if no capitol count to capitol rebuild
+            breedingAbility = (int) (raceUnitsList.size() / 20);
+            toSpawnCapitolCount--;
+            if(toSpawnCapitolCount == 0){
+                this.makeNewCapitol();
+            }
+        }
 
+        // Info text
         if(!hasCapitol)
             System.out.print("No capitol ");
         System.out.println(ID + " Breeding ability: " + breedingAbility + " number of units: " + raceUnitsList.size());
@@ -240,10 +249,31 @@ public class Race {
         }
     }
 
+    private void makeNewCapitol() {
+        if(!hasCapitol){
+            hasCapitol = true;
+            toSpawnCapitolCount = 5;
+
+            // chose random unit from unit list
+            Random rand = new Random();
+            int tmpRand = rand.nextInt(raceUnitsList.size());
+
+            // get unit to make it capitol
+            UnitInstance unitInstance = raceUnitsList.get(tmpRand);
+
+            CAPITOL_X_INDEX = unitInstance.getXIndex();
+            CAPITOL_Y_INDEX = unitInstance.getYIndex();
+
+            // Change UnitInstance to Capitol
+            unitInstance.changeSide(ID, COLOR, true);
+        }
+    }
+
     public void loseUnit(UnitInstance unit){
+        // if capitol lose capitol
         if(GameplayScreen.strategyArray[unit.getYIndex()][unit.getXIndex()] == ID){
             hasCapitol = false;
-            return;
+            unit.loseCapitolStatus();
         }
         for(int i = 0; i < raceUnitsList.size(); ++i){
             UnitInstance testedUnit = raceUnitsList.get(i);
@@ -264,18 +294,18 @@ public class Race {
         int maxDistance = 87;
         // constant to make max power max value equals 10
         int constantDiv = 9;
-        
+
         int enemyCapitolX = GameplayScreen.raceList.get(raceIndexInList).getCAPITOL_X_INDEX();
         int enemyCapitolY = GameplayScreen.raceList.get(raceIndexInList).getCAPITOL_Y_INDEX();
 
         // calculate distance from capitol and divide it by max distance square root/
         int enemyPower = (int)((maxDistance - (int) Math.sqrt(Math.abs(enemyCapitolX - claimingUnit.getXIndex()) *
-                Math.abs(enemyCapitolX - claimingUnit.getXIndex()) + 
+                Math.abs(enemyCapitolX - claimingUnit.getXIndex()) +
                 Math.abs(enemyCapitolY - claimingUnit.getYIndex()) *
                 Math.abs(enemyCapitolY - claimingUnit.getYIndex()))) / constantDiv) + 1;
         int thisUnitPower = (int)((maxDistance - (int) Math.sqrt(Math.abs(CAPITOL_X_INDEX - claimingUnit.getXIndex()) *
                 Math.abs(CAPITOL_X_INDEX - claimingUnit.getXIndex()) +
-                Math.abs(CAPITOL_Y_INDEX - claimingUnit.getYIndex()) * 
+                Math.abs(CAPITOL_Y_INDEX - claimingUnit.getYIndex()) *
                 Math.abs(CAPITOL_Y_INDEX - claimingUnit.getYIndex()))) / constantDiv) + 1;
 
         Random rand = new Random();
@@ -283,6 +313,7 @@ public class Race {
 
         return tmpRand >= enemyPower;
     }
+
 
 
 
@@ -302,5 +333,13 @@ public class Race {
 
     public int getCAPITOL_Y_INDEX() {
         return CAPITOL_Y_INDEX;
+    }
+
+    public void setCAPITOL_X_INDEX(int CAPITOL_X_INDEX) {
+        this.CAPITOL_X_INDEX = CAPITOL_X_INDEX;
+    }
+
+    public void setCAPITOL_Y_INDEX(int CAPITOL_Y_INDEX) {
+        this.CAPITOL_Y_INDEX = CAPITOL_Y_INDEX;
     }
 }

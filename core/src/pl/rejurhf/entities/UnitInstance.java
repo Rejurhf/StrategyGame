@@ -58,11 +58,34 @@ public class UnitInstance extends Image {
         this.setDrawable(UnitConstants.getDrawable(unitColor));
     }
 
-    public void changeSide(int id, String capitolColor, boolean isCapitol){
-        this.isCapitol = isCapitol;
+    void changeSide(int id, String capitolColor, boolean isCapitol){
+        if(isCapitol)
+            this.giveCapitolStatus();
 
         changeSide(id, capitolColor);
     }
+
+    boolean equals(UnitInstance unit){
+        return unit.getXIndex() == this.getXIndex() && unit.getYIndex() == this.getYIndex();
+    }
+
+    void loseCapitolStatus() {
+        if(isCapitol)
+            isCapitol = false;
+    }
+
+    private void giveCapitolStatus(){
+        if(!isCapitol){
+            isCapitol = true;
+        }
+    }
+
+
+    /*
+
+    Getters and Setters
+
+     */
 
     public int getXIndex() {
         return STARTING_X / StrategyGame.UNIT_LEN;
@@ -70,9 +93,5 @@ public class UnitInstance extends Image {
 
     public int getYIndex() {
         return STARTING_Y / StrategyGame.UNIT_LEN;
-    }
-
-    public boolean equals(UnitInstance unit){
-        return unit.getXIndex() == this.getXIndex() && unit.getYIndex() == this.getYIndex();
     }
 }

@@ -25,12 +25,18 @@ public class InitialScreen extends AbstractScreen {
     }
 
     private void initSubmitButton() {
-        final int[] capitolArray = {144, 184, 1544};
+        // Array with location on the board
+        final int[] capitolArray = {StrategyGame.BOARD_WIDTH + 3,
+                StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH - 5,
+                (StrategyGame.BOARD_HEIGHT - 2) * StrategyGame.BOARD_WIDTH + 12,
+                (StrategyGame.BOARD_HEIGHT - 2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH - 1};
+
+        // Array with color of races
         final ArrayList<String> colorList = new ArrayList<String>();
         colorList.add(UnitConstants.BLUE_CAPITOL);
         colorList.add(UnitConstants.RED_CAPITOL);
         colorList.add(UnitConstants.GREEN_CAPITOL);
-//        colorList.add(UnitConstants.PINK_CAPITOL);
+        colorList.add(UnitConstants.PINK_CAPITOL);
 
         submitButton = new SubmitButton(new IClickCallback() {
             @Override
