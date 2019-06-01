@@ -23,7 +23,6 @@ public class UnitConstants {
     public static final int EMPTY_SPACE_ID = 0;
     public static final int MOUNTAIN_ID = -1;
 
-
     private static Texture emptySpaceTexture;
     private static TextureRegionDrawable emptySpace;
     private static TextureRegionDrawable mountain;
@@ -39,6 +38,11 @@ public class UnitConstants {
     private static TextureRegionDrawable seaUnit;
     private static TextureRegionDrawable yellowCapitol;
     private static TextureRegionDrawable yellowUnit;
+
+    public static int RACE_ID = 0;
+    public static int PEOPLE_ID = 1;
+    public static int ELVES_ID = 2;
+    public static int ORCS_ID = 3;
 
     public static Texture getEmptySpaceTexture(){
         if(emptySpaceTexture == null)
@@ -136,5 +140,18 @@ public class UnitConstants {
             return "YELLOW";
 
         return "this is not supported color";
+    }
+
+    public static String getRaceName(int raceID){
+        if(raceID == RACE_ID)
+            return "RACE";
+        else if(raceID == PEOPLE_ID)
+            return "PEOPLE";
+        else if(raceID == ELVES_ID)
+            return "ELVES";
+        else if(raceID == ORCS_ID)
+            return "ORCS";
+
+        return "Not compatible rrace";
     }
 }

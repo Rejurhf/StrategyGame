@@ -10,6 +10,7 @@ import java.util.*;
 
 public class Race {
     private int ID;
+    private int RACE_TYPE;
     private int CAPITOL_X_INDEX;
     private int CAPITOL_Y_INDEX;
     private ArrayList<UnitInstance> raceUnitsList;
@@ -19,19 +20,20 @@ public class Race {
     private boolean hasCapitol = true;
 
     // Race specific const
-    private int toSpawnCapitolCount;
-    private int spawnCapitolConst;
-    private int breedingFromUnitConst;
-    private int breedingFromCapitolConst;
-    private int unitPowerConst;
-    private boolean isPowerFromCapitolDependent;
+    int toSpawnCapitolCount;
+    int spawnCapitolConst;
+    int breedingFromUnitConst;
+    int breedingFromCapitolConst;
+    int unitPowerConst;
+    boolean isPowerFromCapitolDependent;
 
-    public Race(UnitInstance unitInstance, String raceColor, int id) {
+    public Race(UnitInstance unitInstance, String raceColor, int raceType, int id) {
         // Set variables
         ID = id;
         COLOR = raceColor;
         CAPITOL_X_INDEX = unitInstance.getXIndex();
         CAPITOL_Y_INDEX = unitInstance.getYIndex();
+        RACE_TYPE = raceType;
 
         // Change UnitInstance to Capitol
         unitInstance.changeSide(ID, COLOR, true);
@@ -82,13 +84,14 @@ public class Race {
 
         // Info text
         if(raceUnitsList.size() == 0){
-            System.out.println("Race " + ID + " " + UnitConstants.getColorName(COLOR) + " is dead");
+            System.out.println(ID + " Race " + UnitConstants.getRaceName(RACE_TYPE) + " " +
+                    UnitConstants.getColorName(COLOR) + " is dead");
         }else{
             if(!hasCapitol)
                 System.out.print("No capitol ");
-            System.out.println(ID + " " + UnitConstants.getColorName(COLOR) +
-                    ": Moves: " + possibleMoves.size() + " War moves: " + possibleWarMoves.size() +
-                    " Breeding: " + breedingAbility + " Units: " + raceUnitsList.size());
+            System.out.println(ID + " " + UnitConstants.getRaceName(RACE_TYPE) + " " +
+                    UnitConstants.getColorName(COLOR) + ": Moves: " + possibleMoves.size() + " War moves: " +
+                    possibleWarMoves.size() + " Breeding: " + breedingAbility + " Units: " + raceUnitsList.size());
         }
 
         // If there is more neighboring empty spaces than breeding ability

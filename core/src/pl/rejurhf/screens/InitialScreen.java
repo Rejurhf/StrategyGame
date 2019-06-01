@@ -26,26 +26,34 @@ public class InitialScreen extends AbstractScreen {
 
     private void initSubmitButton() {
         // Array with location on the board
-        final int[] capitolArray = {(StrategyGame.BOARD_HEIGHT/2 - 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 2,
-                (StrategyGame.BOARD_HEIGHT/2 - 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2,
-                (StrategyGame.BOARD_HEIGHT/2 - 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 2,
-                (StrategyGame.BOARD_HEIGHT/2 + 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 2,
-                (StrategyGame.BOARD_HEIGHT/2 + 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2,
-                (StrategyGame.BOARD_HEIGHT/2 + 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 2};
+        final ArrayList<Integer> capitolList = new ArrayList<Integer>();
+        capitolList.add((StrategyGame.BOARD_HEIGHT/2 - 2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 3);
+        capitolList.add((StrategyGame.BOARD_HEIGHT/2 - 2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 1);
+//        capitolList.add((StrategyGame.BOARD_HEIGHT/2 - 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 2);
+        capitolList.add((StrategyGame.BOARD_HEIGHT/2 + 2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 3);
+        capitolList.add((StrategyGame.BOARD_HEIGHT/2 + 2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 1);
+//        capitolList.add((StrategyGame.BOARD_HEIGHT/2 + 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 2);
 
         // Array with color of races
         final ArrayList<String> colorList = new ArrayList<String>();
-        colorList.add(UnitConstants.BLUE_CAPITOL);
+//        colorList.add(UnitConstants.BLUE_CAPITOL);
         colorList.add(UnitConstants.RED_CAPITOL);
         colorList.add(UnitConstants.GREEN_CAPITOL);
-        colorList.add(UnitConstants.PINK_CAPITOL);
+//        colorList.add(UnitConstants.PINK_CAPITOL);
         colorList.add(UnitConstants.SEA_CAPITOL);
         colorList.add(UnitConstants.YELLOW_CAPITOL);
+
+        // Array with races IDs
+        final ArrayList<Integer> raceIDList = new ArrayList<Integer>();
+        raceIDList.add(0);
+        raceIDList.add(1);
+        raceIDList.add(2);
+        raceIDList.add(3);
 
         submitButton = new SubmitButton(new IClickCallback() {
             @Override
             public void onClick() {
-                game.setScreen(new GameplayScreen(game, capitolArray, colorList));
+                game.setScreen(new GameplayScreen(game, capitolList, colorList, raceIDList));
             }
         });
 

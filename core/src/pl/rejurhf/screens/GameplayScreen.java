@@ -3,8 +3,8 @@ package pl.rejurhf.screens;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import pl.rejurhf.StrategyGame;
-import pl.rejurhf.entities.Race;
-import pl.rejurhf.entities.UnitInstance;
+import pl.rejurhf.entities.*;
+import pl.rejurhf.support.UnitConstants;
 import pl.rejurhf.ui.IClickCallback;
 import pl.rejurhf.ui.NextButton;
 
@@ -19,15 +19,16 @@ public class GameplayScreen extends AbstractScreen {
     public static int[][] strategyArray;
     private int roundCounter = 0;
 
-    public GameplayScreen(StrategyGame game, int[] capitolArray, ArrayList<String> raceColors){
+    public GameplayScreen(StrategyGame game, ArrayList<Integer> capitolList, ArrayList<String> raceColors,
+                          ArrayList<Integer> raceIDList){
         super(game);
-        init(capitolArray, raceColors);
+        init(capitolList, raceColors, raceIDList);
     }
 
-    private void init(int[] capitolArray, ArrayList<String> raceColors) {
+    private void init(ArrayList<Integer> capitolList, ArrayList<String> raceColors, ArrayList<Integer> raceIDList) {
         initBg();
         initBoard();
-        initRace(capitolArray, raceColors);
+        initRace(capitolList, raceColors, raceIDList);
         initNextRoundButton();
 
     }
@@ -49,11 +50,31 @@ public class GameplayScreen extends AbstractScreen {
         stage.addActor(nextButton);
     }
 
-    private void initRace(int[] capitolArray, ArrayList<String> raceColors) {
+    private void initRace(ArrayList<Integer> capitolList, ArrayList<String> raceColors, ArrayList<Integer> raceIDList) {
         raceList = new ArrayList<Race>();
 
-        for(int i = 0; i < capitolArray.length; ++i){
-            Race newRace = new Race(unitsList.get(capitolArray[i]), raceColors.get(i), 2*i+1);
+        // protection against IndexOutOfBoundsException
+        int numberOfRaces = 0;
+        if(capitolList.size() <= raceColors.size() && capitolList.size() <= raceIDList.size())
+            numberOfRaces = capitolList.size();
+        else if(raceColors.size() <= capitolList.size() && raceColors.size() <= raceIDList.size())
+            numberOfRaces = raceColors.size();
+        else
+            numberOfRaces = raceIDList.size();
+
+        // assign races
+        for(int i = 0; i < numberOfRaces; ++i){
+            Race newRace = null;
+
+            if(raceIDList.get(i) == UnitConstants.PEOPLE_ID)
+                newRace = new People(unitsList.get(capitolList.get(i)), raceColors.get(i), raceIDList.get(i), 2*i+1);
+            else if(raceIDList.get(i) == UnitConstants.ELVES_ID)
+                newRace = new Elves(unitsList.get(capitolList.get(i)), raceColors.get(i), raceIDList.get(i), 2*i+1);
+            else if(raceIDList.get(i) == UnitConstants.ORCS_ID)
+                newRace = new Orcs(unitsList.get(capitolList.get(i)), raceColors.get(i), raceIDList.get(i), 2*i+1);
+            else
+                newRace = new Race(unitsList.get(capitolList.get(i)), raceColors.get(i), raceIDList.get(i), 2*i+1);
+
             raceList.add(newRace);
         }
     }
