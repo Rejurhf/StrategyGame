@@ -20,8 +20,6 @@ public class UnitConstants {
     public static final String YELLOW_CAPITOL = "units\\yellow_boss.png";
     public static final String YELLOW_UNIT = "units\\yellow_unit.png";
 
-    public static final int EMPTY_SPACE_ID = 0;
-    public static final int MOUNTAIN_ID = -1;
 
     private static Texture emptySpaceTexture;
     private static TextureRegionDrawable emptySpace;
@@ -39,10 +37,14 @@ public class UnitConstants {
     private static TextureRegionDrawable yellowCapitol;
     private static TextureRegionDrawable yellowUnit;
 
+
+    public static final int MOUNTAIN_ID = -1;
+    public static final int EMPTY_SPACE_ID = 0;
     public static int RACE_ID = 0;
     public static int PEOPLE_ID = 1;
     public static int ELVES_ID = 2;
     public static int ORCS_ID = 3;
+
 
     public static Texture getEmptySpaceTexture(){
         if(emptySpaceTexture == null)
@@ -56,73 +58,54 @@ public class UnitConstants {
             if(emptySpace == null)
                 emptySpace = new TextureRegionDrawable(new TextureRegion(emptySpaceTexture));
             return emptySpace;
+
         }else if(imageName.equals(MOUNTAIN)){
-            if(mountain == null){
-                mountain = new TextureRegionDrawable(new TextureRegion(new Texture(MOUNTAIN)));
-            }
-            return mountain;
+            return getDrawable(imageName, mountain);
+
         }else if(imageName.equals(BLUE_CAPITOL)){
-            if(blueCapitol == null){
-                blueCapitol = new TextureRegionDrawable(new TextureRegion(new Texture(BLUE_CAPITOL)));
-            }
-            return blueCapitol;
+            return getDrawable(imageName, blueCapitol);
+
         }else if(imageName.equals(BLUE_UNIT)){
-            if(blueUnit == null){
-                blueUnit = new TextureRegionDrawable(new TextureRegion(new Texture(BLUE_UNIT)));
-            }
-            return blueUnit;
+            return getDrawable(imageName, blueUnit);
+
         }else if(imageName.equals(GREEN_CAPITOL)){
-            if(greenCapitol == null){
-                greenCapitol = new TextureRegionDrawable(new TextureRegion(new Texture(GREEN_CAPITOL)));
-            }
-            return greenCapitol;
+            return getDrawable(imageName, greenCapitol);
+
         }else if(imageName.equals(GREEN_UNIT)){
-            if(greenUnit == null){
-                greenUnit = new TextureRegionDrawable(new TextureRegion(new Texture(GREEN_UNIT)));
-            }
-            return greenUnit;
+            return getDrawable(imageName, greenUnit);
+
         }else if(imageName.equals(PINK_CAPITOL)){
-            if(pinkCapitol == null){
-                pinkCapitol = new TextureRegionDrawable(new TextureRegion(new Texture(PINK_CAPITOL)));
-            }
-            return pinkCapitol;
+            return getDrawable(imageName, pinkCapitol);
+
         }else if(imageName.equals(PINK_UNIT)){
-            if(pinkUnit == null){
-                pinkUnit = new TextureRegionDrawable(new TextureRegion(new Texture(PINK_UNIT)));
-            }
-            return pinkUnit;
+            return getDrawable(imageName, pinkUnit);
+
         }else if(imageName.equals(RED_CAPITOL)){
-            if(redCapitol == null){
-                redCapitol = new TextureRegionDrawable(new TextureRegion(new Texture(RED_CAPITOL)));
-            }
-            return redCapitol;
+            return getDrawable(imageName, redCapitol);
+
         }else if(imageName.equals(RED_UNIT)){
-            if(redUnit == null){
-                redUnit = new TextureRegionDrawable(new TextureRegion(new Texture(RED_UNIT)));
-            }
-            return redUnit;
+            return getDrawable(imageName, redUnit);
+
         }else if(imageName.equals(SEA_CAPITOL)){
-            if(seaCapitol == null){
-                seaCapitol = new TextureRegionDrawable(new TextureRegion(new Texture(SEA_CAPITOL)));
-            }
-            return seaCapitol;
+            return getDrawable(imageName, seaCapitol);
+
         }else if(imageName.equals(SEA_UNIT)){
-            if(seaUnit == null){
-                seaUnit = new TextureRegionDrawable(new TextureRegion(new Texture(SEA_UNIT)));
-            }
-            return seaUnit;
+            return getDrawable(imageName, seaUnit);
+
         }else if(imageName.equals(YELLOW_CAPITOL)){
-            if(yellowCapitol == null){
-                yellowCapitol = new TextureRegionDrawable(new TextureRegion(new Texture(YELLOW_CAPITOL)));
-            }
-            return yellowCapitol;
+            return getDrawable(imageName, yellowCapitol);
+
         }else if(imageName.equals(YELLOW_UNIT)){
-            if(yellowUnit == null){
-                yellowUnit = new TextureRegionDrawable(new TextureRegion(new Texture(YELLOW_UNIT)));
-            }
-            return yellowUnit;
+            return getDrawable(imageName, yellowUnit);
+
         }else
             return null;
+    }
+
+    private static TextureRegionDrawable getDrawable(String imageSrc, TextureRegionDrawable imageDrawable){
+        if (imageDrawable == null)
+            imageDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(imageSrc)));
+        return imageDrawable;
     }
 
     public static String getColorName(String color){

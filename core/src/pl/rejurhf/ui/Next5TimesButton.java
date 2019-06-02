@@ -1,11 +1,9 @@
 package pl.rejurhf.ui;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import pl.rejurhf.support.UIConstants;
 
 public class Next5TimesButton extends Button {
     public Next5TimesButton(IClickCallback callback) {
@@ -15,8 +13,8 @@ public class Next5TimesButton extends Button {
     }
 
     private void init(final IClickCallback callback) {
-        this.setSize(100, 100);
-        this.setPosition(1450, 400);
+        this.setSize(340, 100);
+        this.setPosition(1425, 400);
 
         this.addListener(new ClickListener(){
             @Override
@@ -29,11 +27,9 @@ public class Next5TimesButton extends Button {
     }
 
     private static Button.ButtonStyle prepareNextButtonStyle() {
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("ui_style\\ui-red.atlas"));
-        Skin skin = new Skin(atlas);
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
-        buttonStyle.up = skin.getDrawable("button_03");
-        buttonStyle.down = skin.getDrawable("button_02");
+        buttonStyle.up = UIConstants.getDrawable(UIConstants.NEXT_BUTTON_5X_UP);
+        buttonStyle.down = UIConstants.getDrawable(UIConstants.NEXT_BUTTON_5X_DOWN);
 
         return buttonStyle;
     }
