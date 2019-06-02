@@ -139,6 +139,7 @@ public class GameplayScreen extends AbstractScreen {
     // set background
     private void initBg() {
         bgImg = new Image(new Texture("bg\\game_screen_bg.png"));
+        bgImg.setSize(StrategyGame.WIDTH, StrategyGame.HEIGHT);
         stage.addActor(bgImg);
     }
 

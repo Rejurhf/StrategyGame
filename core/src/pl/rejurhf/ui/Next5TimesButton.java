@@ -7,7 +7,7 @@ import pl.rejurhf.support.UIConstants;
 
 public class Next5TimesButton extends Button {
     public Next5TimesButton(IClickCallback callback) {
-        super(prepareNextButtonStyle());
+        super(UIConstants.getDefaultSkin());
 
         init(callback);
     }
@@ -24,14 +24,6 @@ public class Next5TimesButton extends Button {
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
-    }
-
-    private static Button.ButtonStyle prepareNextButtonStyle() {
-        Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
-        buttonStyle.up = UIConstants.getDrawable(UIConstants.NEXT_BUTTON_5X_UP);
-        buttonStyle.down = UIConstants.getDrawable(UIConstants.NEXT_BUTTON_5X_DOWN);
-
-        return buttonStyle;
     }
 }
 

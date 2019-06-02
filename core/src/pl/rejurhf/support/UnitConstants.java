@@ -107,12 +107,6 @@ public class UnitConstants {
             return null;
     }
 
-    private static TextureRegionDrawable getDrawable(String imageSrc, TextureRegionDrawable imageDrawable){
-        if (imageDrawable == null)
-            imageDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(imageSrc)));
-        return imageDrawable;
-    }
-
     public static String getColorName(String color){
         if(color.equals(BLUE_CAPITOL) || color.equals(BLUE_UNIT))
             return "BLUE";
@@ -141,5 +135,17 @@ public class UnitConstants {
             return "ORCS";
 
         return "Not compatible rrace";
+    }
+
+    /*
+
+    private
+
+     */
+
+    private static TextureRegionDrawable getDrawable(String imageSrc, TextureRegionDrawable imageDrawable){
+        if (imageDrawable == null)
+            imageDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(imageSrc)));
+        return imageDrawable;
     }
 }

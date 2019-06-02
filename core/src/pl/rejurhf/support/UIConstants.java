@@ -1,7 +1,9 @@
 package pl.rejurhf.support;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class UIConstants {
@@ -58,6 +60,17 @@ public class UIConstants {
         } else
             return null;
     }
+
+    public static Skin getDefaultSkin() {
+        Skin skin = new Skin(Gdx.files.internal("default\\uiskin.json"));
+        return skin;
+    }
+
+    /*
+
+    private
+
+     */
 
     private static TextureRegionDrawable getDrawable(String imageSrc, TextureRegionDrawable imageDrawable){
         if (imageDrawable == null)

@@ -1,25 +1,19 @@
 package pl.rejurhf.ui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import pl.rejurhf.support.UIConstants;
 
 public class CustomSelectBox extends SelectBox {
     public CustomSelectBox(int xPos, int yPos, String[] items){
-        super(prepareSkin());
+        super(UIConstants.getDefaultSkin());
 
-        initValues(xPos, yPos, items);
+        init(xPos, yPos, items);
     }
 
-    private void initValues(int xPos, int yPos, String[] items) {
+    private void init(int xPos, int yPos, String[] items) {
 
         this.setItems(items);
-        this.setSize(200, 30);
+        this.setSize(100, 30);
         this.setPosition(xPos, yPos);
-    }
-
-    private static Skin prepareSkin() {
-        Skin skin = new Skin(Gdx.files.internal("default\\uiskin.json"));
-        return skin;
     }
 }
