@@ -6,6 +6,8 @@ import pl.rejurhf.StrategyGame;
 import pl.rejurhf.entities.*;
 import pl.rejurhf.support.UnitConstants;
 import pl.rejurhf.ui.IClickCallback;
+import pl.rejurhf.ui.Next10TimesButton;
+import pl.rejurhf.ui.Next5TimesButton;
 import pl.rejurhf.ui.NextButton;
 
 import java.util.ArrayList;
@@ -14,6 +16,8 @@ import java.util.List;
 public class GameplayScreen extends AbstractScreen {
     private Image bgImg;
     private NextButton nextButton;
+    private Next5TimesButton next5TimesButton;
+    private Next10TimesButton next10TimesButton;
     public static List<UnitInstance> unitsList;
     public static List<Race> raceList;
     public static int[][] strategyArray;
@@ -30,24 +34,55 @@ public class GameplayScreen extends AbstractScreen {
         initBoard();
         initRace(capitolList, raceColors, raceIDList);
         initNextRoundButton();
+        initNextRound5Button();
+        initNextRound10Button();
+    }
 
+    private void initNextRound10Button() {
+        next10TimesButton = new Next10TimesButton(new IClickCallback() {
+            @Override
+            public void onClick() {
+                for(int i = 0; i < 10; ++i){
+                    playNextRound();
+                }
+            }
+        });
+
+        stage.addActor(next10TimesButton);
+    }
+
+    private void initNextRound5Button() {
+        next5TimesButton = new Next5TimesButton(new IClickCallback() {
+            @Override
+            public void onClick() {
+                for(int i = 0; i < 5; ++i){
+                    playNextRound();
+                }
+            }
+        });
+
+        stage.addActor(next5TimesButton);
     }
 
     private void initNextRoundButton() {
         nextButton = new NextButton(new IClickCallback() {
             @Override
             public void onClick() {
-                System.out.println("\nRound: " + ++roundCounter);
-                for(Race race : raceList){
-                    race.planNextMove();
-                }
-                for(Race race : raceList){
-                    race.executeMovePlan(unitsList);
-                }
+                playNextRound();
             }
         });
 
         stage.addActor(nextButton);
+    }
+
+    private void playNextRound(){
+        System.out.println("\nRound: " + ++roundCounter);
+        for(Race race : raceList){
+            race.planNextMove();
+        }
+        for(Race race : raceList){
+            race.executeMovePlan(unitsList);
+        }
     }
 
     private void initRace(ArrayList<Integer> capitolList, ArrayList<String> raceColors, ArrayList<Integer> raceIDList) {
