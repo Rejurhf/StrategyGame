@@ -40,10 +40,15 @@ public class UnitConstants {
 
     public static final int MOUNTAIN_ID = -1;
     public static final int EMPTY_SPACE_ID = 0;
-    public static int RACE_ID = 0;
-    public static int PEOPLE_ID = 1;
-    public static int ELVES_ID = 2;
-    public static int ORCS_ID = 3;
+    public static final int RACE_ID = 0;
+    public static final int PEOPLE_ID = 1;
+    public static final int ELVES_ID = 2;
+    public static final int ORCS_ID = 3;
+
+
+    public static final String[] RACES_ARRAY = {"Race", "People", "Elves", "Orcs"};
+    public static final String[] COLOR_ARRAY = {"Blue", "Green", "Pink", "Red", "Sea", "Yellow"};
+
 
 
     public static Texture getEmptySpaceTexture(){

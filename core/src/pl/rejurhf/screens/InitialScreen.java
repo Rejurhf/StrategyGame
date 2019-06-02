@@ -3,16 +3,20 @@ package pl.rejurhf.screens;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import pl.rejurhf.StrategyGame;
+import pl.rejurhf.entities.Elves;
 import pl.rejurhf.support.UnitConstants;
 import pl.rejurhf.ui.IClickCallback;
+import pl.rejurhf.ui.CustomSelectBox;
 import pl.rejurhf.ui.SubmitButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class InitialScreen extends AbstractScreen {
     private Image bgImg;
     private SubmitButton submitButton;
-    private int[] capitolsArray;
+    private List<CustomSelectBox> selectBoxRaceList;
+    private List<CustomSelectBox> selectBoxColorList;
 
     public InitialScreen(final StrategyGame game){
         super(game);
@@ -21,7 +25,29 @@ public class InitialScreen extends AbstractScreen {
     @Override
     protected void init() {
         initBg();
+        initDropDownRace();
+        initDropDownColor();
         initSubmitButton();
+    }
+
+    private void initDropDownColor() {
+        selectBoxColorList = new ArrayList<CustomSelectBox>();
+
+        for (int i = 0; i < 6; ++i){
+            CustomSelectBox selectBoxRace = new CustomSelectBox(430, 900 - (50 * i), UnitConstants.COLOR_ARRAY);
+            selectBoxRaceList.add(selectBoxRace);
+            stage.addActor(selectBoxRace);
+        }
+    }
+
+    private void initDropDownRace() {
+        selectBoxRaceList = new ArrayList<CustomSelectBox>();
+
+        for (int i = 0; i < 6; ++i){
+            CustomSelectBox selectBoxRace = new CustomSelectBox(200, 900 - (50 * i), UnitConstants.RACES_ARRAY);
+            selectBoxRaceList.add(selectBoxRace);
+            stage.addActor(selectBoxRace);
+        }
     }
 
     private void initSubmitButton() {
@@ -53,6 +79,10 @@ public class InitialScreen extends AbstractScreen {
         submitButton = new SubmitButton(new IClickCallback() {
             @Override
             public void onClick() {
+                for (CustomSelectBox selectBoxRace : selectBoxRaceList){
+                    System.out.println(selectBoxRace.getSelected());
+                }
+
                 game.setScreen(new GameplayScreen(game, capitolList, colorList, raceIDList));
             }
         });
