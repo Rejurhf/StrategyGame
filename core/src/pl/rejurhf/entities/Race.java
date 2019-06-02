@@ -9,15 +9,15 @@ import pl.rejurhf.support.UnitConstants;
 import java.util.*;
 
 public class Race {
-    private int ID;
-    private int RACE_TYPE;
+    int ID;
+    int RACE_TYPE;
     private int CAPITOL_X_INDEX;
     private int CAPITOL_Y_INDEX;
-    private ArrayList<UnitInstance> raceUnitsList;
-    private List<PositionPair> unitsToClaim;
-    private List<Integer> enemyList;
-    private String COLOR;
-    private boolean hasCapitol = true;
+    ArrayList<UnitInstance> raceUnitsList;
+    List<PositionPair> unitsToClaim;
+    List<Integer> enemyList;
+    String COLOR;
+    boolean hasCapitol = true;
 
     // Race specific const
     int toSpawnCapitolCount;
@@ -52,15 +52,6 @@ public class Race {
         breedingFromCapitolConst = 1;
         unitPowerConst = 1;
         isPowerFromCapitolDependent = true;
-
-        //TODO remove adding this to enemy list
-        addRaceToEnemyList(1);
-        addRaceToEnemyList(3);
-        addRaceToEnemyList(5);
-        addRaceToEnemyList(7);
-        addRaceToEnemyList(9);
-        addRaceToEnemyList(11);
-        removeRaceFromEnemyList(ID);
     }
 
     public void planNextMove(){
@@ -129,7 +120,7 @@ public class Race {
         }
     }
 
-    private void assignPossibleMoves(LinkedList<PositionPair> possibleMoves,
+    void assignPossibleMoves(LinkedList<PositionPair> possibleMoves,
                                      LinkedList<Pair<Integer, PositionPair>> possibleWarMoves) {
 //        LinkedList<PositionPair> possibleMoves = new LinkedList<PositionPair>();
 
@@ -213,7 +204,7 @@ public class Race {
 //        return possibleMoves;
     }
 
-    private void assignToArray(PositionPair testedPosition, List<PositionPair> possibleMoves,
+    void assignToArray(PositionPair testedPosition, List<PositionPair> possibleMoves,
                                LinkedList<Pair<Integer, PositionPair>> possibleWarMoves,
                                Queue<PositionPair> unitsToVisit, List<PositionPair> visitedUnits) {
         int testedId = GameplayScreen.strategyArray[testedPosition.Y][testedPosition.X];
@@ -235,7 +226,7 @@ public class Race {
         }
     }
 
-    public boolean positionInArray(List<PositionPair> array, PositionPair testedPosition){
+    boolean positionInArray(List<PositionPair> array, PositionPair testedPosition){
         for(PositionPair position : array){
             if(position.equals(testedPosition))
                 return true;
@@ -244,7 +235,7 @@ public class Race {
         return false;
     }
 
-    public boolean positionInArrayWar(LinkedList<Pair<Integer, PositionPair>> array, PositionPair testedPosition){
+    boolean positionInArrayWar(LinkedList<Pair<Integer, PositionPair>> array, PositionPair testedPosition){
         for(Pair pair : array){
             if(pair.getValue().equals(testedPosition))
                 return true;
@@ -292,7 +283,7 @@ public class Race {
         return tmpRand == 1;
     }
 
-    private void makeNewCapitol() {
+    void makeNewCapitol() {
         if(!hasCapitol){
             hasCapitol = true;
             toSpawnCapitolCount = spawnCapitolConst;
@@ -312,7 +303,7 @@ public class Race {
         }
     }
 
-    public void loseUnit(UnitInstance unit, int enemyID){
+    private void loseUnit(UnitInstance unit, int enemyID){
         // if capitol lose capitol
         if(GameplayScreen.strategyArray[unit.getYIndex()][unit.getXIndex()] == ID){
             hasCapitol = false;
@@ -331,21 +322,21 @@ public class Race {
     }
 
     // Add capitol and unit as enemy
-    private void addRaceToEnemyList(int enemyID) {
-        if(!enemyList.contains(enemyID)){
-            enemyList.add(enemyID);
-            enemyList.add(enemyID+1);
+    void addRaceToEnemyList(int enemyCapitolID) {
+        if(!enemyList.contains(enemyCapitolID)){
+            enemyList.add(enemyCapitolID);
+            enemyList.add(enemyCapitolID+1);
         }
     }
 
-    private void removeRaceFromEnemyList(int enemyID) {
+    void removeRaceFromEnemyList(int enemyID) {
         if(enemyList.contains(enemyID)){
             enemyList.remove(enemyList.indexOf(enemyID));
             enemyList.remove(enemyList.indexOf(enemyID+1));
         }
     }
 
-    public boolean isVictoryAchieved(UnitInstance claimingUnit){
+    private boolean isVictoryAchieved(UnitInstance claimingUnit){
 //        int indexNumber = claimingUnit.getYIndex() * StrategyGame.BOARD_WIDTH + claimingUnit.getXIndex();
         int unitID = GameplayScreen.strategyArray[claimingUnit.getYIndex()][claimingUnit.getXIndex()];
 
@@ -362,7 +353,7 @@ public class Race {
         return tmpRand >= enemyPower;
     }
 
-    public int calculateUnitPower(UnitInstance claimingUnit){
+    private int calculateUnitPower(UnitInstance claimingUnit){
         // max distance
         int maxDistance = 87;
         // constant to make max power max value equals 10
