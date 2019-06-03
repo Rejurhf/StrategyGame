@@ -156,31 +156,13 @@ public class InitialScreen extends AbstractScreen {
     }
 
     private void initLoadPresetsButton() {
-        // Array with location on the board
+        // Array with location on the board, color of races and races IDs
         final ArrayList<Integer> capitolList = new ArrayList<Integer>();
-        capitolList.add((StrategyGame.BOARD_HEIGHT/2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 9);
-        capitolList.add((StrategyGame.BOARD_HEIGHT/2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 5);
-//        capitolList.add((StrategyGame.BOARD_HEIGHT/2 - 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 2);
-        capitolList.add((StrategyGame.BOARD_HEIGHT/2 + 4) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 9);
-        capitolList.add((StrategyGame.BOARD_HEIGHT/2 + 4) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 5);
-//        capitolList.add((StrategyGame.BOARD_HEIGHT/2 + 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 2);
-
-        // Array with color of races
         final ArrayList<String> colorList = new ArrayList<String>();
-//        colorList.add(UnitConstants.BLUE_CAPITOL);
-        colorList.add(UnitConstants.RED_CAPITOL);
-        colorList.add(UnitConstants.GREEN_CAPITOL);
-//        colorList.add(UnitConstants.PINK_CAPITOL);
-        colorList.add(UnitConstants.SEA_CAPITOL);
-        colorList.add(UnitConstants.YELLOW_CAPITOL);
-
-        // Array with races IDs
         final ArrayList<Integer> raceIDList = new ArrayList<Integer>();
-        raceIDList.add(3);
-        raceIDList.add(1);
-        raceIDList.add(2);
-        raceIDList.add(3);
 
+        // Add content to arrays
+        assignPresets(capitolList, colorList, raceIDList);
 
         CustomTextButton loadPresetsButton = new CustomTextButton("Use presets",
                 startXPosOfSettings + 650, startYPosOfSettings - 50, new IClickCallback() {
@@ -195,6 +177,28 @@ public class InitialScreen extends AbstractScreen {
         });
 
         stage.addActor(loadPresetsButton);
+    }
+
+    private void assignPresets(ArrayList<Integer> capitolList, ArrayList<String> colorList,
+                               ArrayList<Integer> raceIDList){
+        capitolList.add((StrategyGame.BOARD_HEIGHT/2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 9);
+        capitolList.add((StrategyGame.BOARD_HEIGHT/2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 5);
+//        capitolList.add((StrategyGame.BOARD_HEIGHT/2 - 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 2);
+        capitolList.add((StrategyGame.BOARD_HEIGHT/2 + 4) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 9);
+        capitolList.add((StrategyGame.BOARD_HEIGHT/2 + 4) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 5);
+//        capitolList.add((StrategyGame.BOARD_HEIGHT/2 + 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 2);
+
+//        colorList.add(UnitConstants.BLUE_CAPITOL);
+        colorList.add(UnitConstants.RED_CAPITOL);
+        colorList.add(UnitConstants.GREEN_CAPITOL);
+//        colorList.add(UnitConstants.PINK_CAPITOL);
+        colorList.add(UnitConstants.SEA_CAPITOL);
+        colorList.add(UnitConstants.YELLOW_CAPITOL);
+
+        raceIDList.add(3);
+        raceIDList.add(1);
+        raceIDList.add(2);
+        raceIDList.add(3);
     }
 
     private void initSubmitButton() {
