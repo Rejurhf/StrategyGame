@@ -5,19 +5,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import pl.rejurhf.StrategyGame;
 import pl.rejurhf.entities.*;
 import pl.rejurhf.support.UnitConstants;
-import pl.rejurhf.ui.IClickCallback;
-import pl.rejurhf.ui.Next10TimesButton;
-import pl.rejurhf.ui.Next5TimesButton;
-import pl.rejurhf.ui.NextButton;
+import pl.rejurhf.ui.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameplayScreen extends AbstractScreen {
-    private Image bgImg;
-    private NextButton nextButton;
-    private Next5TimesButton next5TimesButton;
-    private Next10TimesButton next10TimesButton;
     public static List<UnitInstance> unitsList;
     public static List<Race> raceList;
     public static int[][] strategyArray;
@@ -39,40 +32,43 @@ public class GameplayScreen extends AbstractScreen {
     }
 
     private void initNextRound10Button() {
-        next10TimesButton = new Next10TimesButton(new IClickCallback() {
+        CustomTextButton creditsButton = new CustomTextButton("10x Next Round",
+                1425, 250, new IClickCallback() {
             @Override
             public void onClick() {
-                for(int i = 0; i < 10; ++i){
+                for (int i = 0; i < 10; ++i) {
                     playNextRound();
                 }
             }
         });
 
-        stage.addActor(next10TimesButton);
+        stage.addActor(creditsButton);
     }
 
     private void initNextRound5Button() {
-        next5TimesButton = new Next5TimesButton(new IClickCallback() {
+        CustomTextButton creditsButton = new CustomTextButton("5x Next Round",
+                1425, 320, new IClickCallback() {
             @Override
             public void onClick() {
-                for(int i = 0; i < 5; ++i){
+                for (int i = 0; i < 5; ++i) {
                     playNextRound();
                 }
             }
         });
 
-        stage.addActor(next5TimesButton);
+        stage.addActor(creditsButton);
     }
 
     private void initNextRoundButton() {
-        nextButton = new NextButton(new IClickCallback() {
+        CustomTextButton creditsButton = new CustomTextButton("Next Round",
+                1425, 390, new IClickCallback() {
             @Override
             public void onClick() {
                 playNextRound();
             }
         });
 
-        stage.addActor(nextButton);
+        stage.addActor(creditsButton);
     }
 
     private void playNextRound(){
@@ -96,6 +92,7 @@ public class GameplayScreen extends AbstractScreen {
             numberOfRaces = raceColors.size();
         else
             numberOfRaces = raceIDList.size();
+        UnitConstants.setNumberOfRaces(numberOfRaces);
 
         // assign races
         for(int i = 0; i < numberOfRaces; ++i){
@@ -138,7 +135,7 @@ public class GameplayScreen extends AbstractScreen {
 
     // set background
     private void initBg() {
-        bgImg = new Image(new Texture("bg\\game_screen_bg.png"));
+        Image bgImg = new Image(new Texture("bg\\game_screen_bg.png"));
         bgImg.setSize(StrategyGame.WIDTH, StrategyGame.HEIGHT);
         stage.addActor(bgImg);
     }

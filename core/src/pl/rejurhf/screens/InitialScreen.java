@@ -4,10 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import pl.rejurhf.StrategyGame;
-import pl.rejurhf.support.UIConstants;
 import pl.rejurhf.support.UnitConstants;
 import pl.rejurhf.ui.*;
 
@@ -15,15 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InitialScreen extends AbstractScreen {
-    private Image bgImg;
-    private SubmitButton submitButton;
     private List<CustomCheckBox> checkBoxRaceList;
     private List<CustomCheckBox> checkBoxRandomPosList;
     private List<CustomSelectBox> selectBoxRaceList;
     private List<CustomSelectBox> selectBoxColorList;
     private List<CustomTextField> textInputXPosList;
     private List<CustomTextField> textInputYPosList;
-    private int startPosOfSettings;
+
+    private int startXPosOfSettings;
+    private int startYPosOfSettings;
 
     public InitialScreen(final StrategyGame game){
         super(game);
@@ -31,23 +29,44 @@ public class InitialScreen extends AbstractScreen {
 
     @Override
     protected void init() {
-        startPosOfSettings = 100;
+        startXPosOfSettings = 100;
+        startYPosOfSettings = 900;
+
         initBg();
+
         initAddLabels();
         initCheckBoxAddRace();
         initDropDownRace();
         initDropDownColor();
-        initSubmitButton();
         initTextFieldXPos();
         initTextFieldYPos();
         intCheckBoxRandomPos();
+
+        initLoadPresetsButton();
+        initSubmitButton();
+        initCreditsButton();
     }
 
     private void initAddLabels() {
-        Label label = new Label("Label", UIConstants.getDefaultSkin());
-        label.setSize(100, 100);
-        label.setPosition(100, 100);
-        stage.addActor(label);
+        CustomLabel addRaceLabel = new CustomLabel("Add race",
+                startXPosOfSettings - 25, startYPosOfSettings + 35);
+        CustomLabel choseRaceLabel = new CustomLabel("Chose race",
+                startXPosOfSettings + 55, startYPosOfSettings + 35);
+        CustomLabel choceColorLabel = new CustomLabel("Chose color",
+                startXPosOfSettings + 165, startYPosOfSettings + 35);
+        CustomLabel setXPosLabel = new CustomLabel("Set X position",
+                startXPosOfSettings + 270, startYPosOfSettings + 35);
+        CustomLabel setYPosLabel = new CustomLabel("Set Y position",
+                startXPosOfSettings + 380, startYPosOfSettings + 35);
+        CustomLabel setRandPosLabel = new CustomLabel("Use random position",
+                startXPosOfSettings + 490, startYPosOfSettings + 35);
+
+        stage.addActor(addRaceLabel);
+        stage.addActor(choseRaceLabel);
+        stage.addActor(choceColorLabel);
+        stage.addActor(setXPosLabel);
+        stage.addActor(setYPosLabel);
+        stage.addActor(setRandPosLabel);
     }
 
     private void initCheckBoxAddRace() {
@@ -55,7 +74,7 @@ public class InitialScreen extends AbstractScreen {
 
         for (int i = 0; i < 6; ++i){
             final CustomCheckBox customCheckBox = new CustomCheckBox("",
-                    startPosOfSettings, 900  - (50 * i));
+                    startXPosOfSettings, 900  - (50 * i));
 
             customCheckBox.addListener(new ChangeListener(){
                 @Override
@@ -75,7 +94,8 @@ public class InitialScreen extends AbstractScreen {
         selectBoxRaceList = new ArrayList<CustomSelectBox>();
 
         for (int i = 0; i < 6; ++i){
-            CustomSelectBox selectBoxRace = new CustomSelectBox(startPosOfSettings + 40, 900 - (50 * i),
+            CustomSelectBox selectBoxRace = new CustomSelectBox(startXPosOfSettings + 50,
+                    startYPosOfSettings - (50 * i),
                     UnitConstants.RACES_ARRAY);
             selectBoxRaceList.add(selectBoxRace);
             stage.addActor(selectBoxRace);
@@ -86,32 +106,10 @@ public class InitialScreen extends AbstractScreen {
         selectBoxColorList = new ArrayList<CustomSelectBox>();
 
         for (int i = 0; i < 6; ++i){
-            CustomSelectBox selectBoxColor = new CustomSelectBox(startPosOfSettings + 160, 900 - (50 * i),
-                    UnitConstants.COLOR_ARRAY);
+            CustomSelectBox selectBoxColor = new CustomSelectBox(
+                    startXPosOfSettings + 165, startYPosOfSettings - (50 * i), UnitConstants.COLOR_ARRAY);
             selectBoxColorList.add(selectBoxColor);
             stage.addActor(selectBoxColor);
-        }
-    }
-
-    private void initTextFieldXPos() {
-        textInputXPosList = new ArrayList<CustomTextField>();
-
-        for (int i = 0; i < 6; ++i){
-            CustomTextField customTextField = new CustomTextField("",
-                    startPosOfSettings + 300, 900 - (50*i));
-            textInputXPosList.add(customTextField);
-            stage.addActor(customTextField);
-        }
-    }
-
-    private void initTextFieldYPos() {
-        textInputYPosList = new ArrayList<CustomTextField>();
-
-        for (int i = 0; i < 6; ++i){
-            CustomTextField customTextField = new CustomTextField("",
-                    startPosOfSettings + 360, 900 - (50*i));
-            textInputYPosList.add(customTextField);
-            stage.addActor(customTextField);
         }
     }
 
@@ -120,7 +118,7 @@ public class InitialScreen extends AbstractScreen {
 
         for (int i = 0; i < 6; ++i){
             final CustomCheckBox customCheckBox = new CustomCheckBox("",
-                    startPosOfSettings + 270, 900 - (50*i));
+                    startXPosOfSettings + 305, startYPosOfSettings - (50*i));
 
             customCheckBox.addListener(new ChangeListener(){
                 @Override
@@ -132,18 +130,39 @@ public class InitialScreen extends AbstractScreen {
 
             checkBoxRandomPosList.add(customCheckBox);
             stage.addActor(customCheckBox);
-
         }
     }
 
-    private void initSubmitButton() {
+    private void initTextFieldXPos() {
+        textInputXPosList = new ArrayList<CustomTextField>();
+
+        for (int i = 0; i < 6; ++i){
+            CustomTextField customTextField = new CustomTextField("",
+                    startXPosOfSettings + 410, startYPosOfSettings - (50*i));
+            textInputXPosList.add(customTextField);
+            stage.addActor(customTextField);
+        }
+    }
+
+    private void initTextFieldYPos() {
+        textInputYPosList = new ArrayList<CustomTextField>();
+
+        for (int i = 0; i < 6; ++i){
+            CustomTextField customTextField = new CustomTextField("",
+                    startXPosOfSettings + 540, startYPosOfSettings - (50*i));
+            textInputYPosList.add(customTextField);
+            stage.addActor(customTextField);
+        }
+    }
+
+    private void initLoadPresetsButton() {
         // Array with location on the board
         final ArrayList<Integer> capitolList = new ArrayList<Integer>();
-        capitolList.add((StrategyGame.BOARD_HEIGHT/2 - 2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 3);
-        capitolList.add((StrategyGame.BOARD_HEIGHT/2 - 2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 1);
+        capitolList.add((StrategyGame.BOARD_HEIGHT/2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 9);
+        capitolList.add((StrategyGame.BOARD_HEIGHT/2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 5);
 //        capitolList.add((StrategyGame.BOARD_HEIGHT/2 - 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 2);
-        capitolList.add((StrategyGame.BOARD_HEIGHT/2 + 2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 3);
-        capitolList.add((StrategyGame.BOARD_HEIGHT/2 + 2) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 1);
+        capitolList.add((StrategyGame.BOARD_HEIGHT/2 + 4) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 9);
+        capitolList.add((StrategyGame.BOARD_HEIGHT/2 + 4) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 - 5);
 //        capitolList.add((StrategyGame.BOARD_HEIGHT/2 + 1) * StrategyGame.BOARD_WIDTH + StrategyGame.BOARD_WIDTH / 2 + 2);
 
         // Array with color of races
@@ -157,15 +176,17 @@ public class InitialScreen extends AbstractScreen {
 
         // Array with races IDs
         final ArrayList<Integer> raceIDList = new ArrayList<Integer>();
-        raceIDList.add(0);
+        raceIDList.add(3);
         raceIDList.add(1);
         raceIDList.add(2);
         raceIDList.add(3);
 
-        submitButton = new SubmitButton(new IClickCallback() {
+
+        CustomTextButton loadPresetsButton = new CustomTextButton("Use presets",
+                startXPosOfSettings + 650, startYPosOfSettings - 50, new IClickCallback() {
             @Override
             public void onClick() {
-                for (CustomSelectBox selectBoxRace : selectBoxRaceList){
+                for (CustomSelectBox selectBoxRace : selectBoxRaceList) {
                     System.out.println(selectBoxRace.getSelected());
                 }
 
@@ -173,12 +194,36 @@ public class InitialScreen extends AbstractScreen {
             }
         });
 
+        stage.addActor(loadPresetsButton);
+    }
+
+    private void initSubmitButton() {
+        CustomTextButton submitButton = new CustomTextButton("Submit",
+                startXPosOfSettings + 650, startYPosOfSettings - 120, new IClickCallback() {
+                    @Override
+                    public void onClick() {
+                        System.out.println("Submit");
+                    }
+                });
+
         stage.addActor(submitButton);
+    }
+
+    private void initCreditsButton() {
+        CustomTextButton creditsButton = new CustomTextButton("Credits",
+                startXPosOfSettings + 650, startYPosOfSettings - 190, new IClickCallback() {
+                    @Override
+                    public void onClick() {
+                        System.out.println("Credits");
+                    }
+                });
+
+        stage.addActor(creditsButton);
     }
 
     // set background
     private void initBg() {
-        bgImg = new Image(new Texture("bg\\init_screen_bg.png"));
+        Image bgImg = new Image(new Texture("bg\\init_screen_bg.png"));
         bgImg.setSize(StrategyGame.WIDTH, StrategyGame.HEIGHT);
         stage.addActor(bgImg);
     }

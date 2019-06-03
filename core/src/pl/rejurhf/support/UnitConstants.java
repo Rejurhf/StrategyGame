@@ -50,6 +50,8 @@ public class UnitConstants {
     public static final String[] COLOR_ARRAY = {"Blue", "Green", "Pink", "Red", "Sea", "Yellow"};
 
 
+    public static int numberOfRaces = 0;
+
 
     public static Texture getEmptySpaceTexture(){
         if(emptySpaceTexture == null)
@@ -142,6 +144,10 @@ public class UnitConstants {
     private
 
      */
+
+    public static void setNumberOfRaces(int number){
+        numberOfRaces = number;
+    }
 
     private static TextureRegionDrawable getDrawable(String imageSrc, TextureRegionDrawable imageDrawable){
         if (imageDrawable == null)

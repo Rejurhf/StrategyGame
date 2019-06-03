@@ -1,6 +1,6 @@
 package pl.rejurhf.entities;
 
-import pl.rejurhf.screens.GameplayScreen;
+import pl.rejurhf.support.UnitConstants;
 
 public class Orcs extends Race {
 
@@ -20,10 +20,11 @@ public class Orcs extends Race {
 
     private void createEnemyList() {
         // Orcs attacks everyone
-        for(int i = 0; i < GameplayScreen.raceList.size(); ++i){
+        for(int i = 0; i < UnitConstants.numberOfRaces; ++i){
             // For index 0 it will be 2*0+1=1
-            addRaceToEnemyList(2*i + 1);
+            this.addRaceToEnemyList(2*i + 1);
         }
-        removeRaceFromEnemyList(ID);
+
+        this.removeRaceFromEnemyList(ID);
     }
 }
