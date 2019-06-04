@@ -169,10 +169,6 @@ public class InitialScreen extends AbstractScreen {
                 startXPosOfSettings + 620, startYPosOfSettings - 50, new IClickCallback() {
             @Override
             public void onClick() {
-                for (CustomSelectBox selectBoxRace : selectBoxRaceList) {
-                    System.out.println(selectBoxRace.getSelected());
-                }
-
                 game.setScreen(new GameplayScreen(game, capitolList, colorList, raceIDList));
             }
         });
@@ -196,10 +192,10 @@ public class InitialScreen extends AbstractScreen {
         colorList.add(UnitConstants.SEA_CAPITOL);
         colorList.add(UnitConstants.YELLOW_CAPITOL);
 
+        raceIDList.add(1);
+        raceIDList.add(1);
         raceIDList.add(3);
         raceIDList.add(1);
-        raceIDList.add(2);
-        raceIDList.add(3);
     }
 
     private void initSubmitButton() {
@@ -216,7 +212,7 @@ public class InitialScreen extends AbstractScreen {
                         final ArrayList<Integer> raceIDList = new ArrayList<Integer>();
                         assignInputToArrays(capitolList, colorList, raceIDList);
 
-                        System.out.println("Submit");
+                        game.setScreen(new GameplayScreen(game, capitolList, colorList, raceIDList));
                     }
                 });
 
@@ -278,7 +274,21 @@ public class InitialScreen extends AbstractScreen {
 
     private void assignInputToArrays(ArrayList<Integer> capitolList, ArrayList<String> colorList,
                                      ArrayList<Integer> raceIDList) {
+        for(int i = 0; i < 6; ++i){
+            // if checked then add to list
+            if(checkBoxRaceList.get(i).isChecked()){
+                // Add position
+                capitolList.add(Integer.parseInt(textInputYPosList.get(i).getText()) * StrategyGame.BOARD_WIDTH +
+                        Integer.parseInt(textInputXPosList.get(i).getText()));
 
+                // Add color
+                colorList.add(UnitConstants.getCapitolColorFromColorName(
+                        selectBoxColorList.get(i).getSelected().toString()));
+
+                // Add race ID
+                raceIDList.add(UnitConstants.getIDFromRaceName(selectBoxRaceList.get(i).getSelected().toString()));
+            }
+        }
     }
 
     private void initCreditsButton() {

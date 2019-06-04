@@ -40,6 +40,8 @@ public class UnitConstants {
 
     public static final int MOUNTAIN_ID = -1;
     public static final int EMPTY_SPACE_ID = 0;
+
+
     public static final int RACE_ID = 0;
     public static final int PEOPLE_ID = 1;
     public static final int ELVES_ID = 2;
@@ -126,6 +128,23 @@ public class UnitConstants {
         return "this is not supported color";
     }
 
+    public static String getCapitolColorFromColorName(String color){
+        if(color.equals("Blue"))
+            return BLUE_CAPITOL;
+        else if(color.equals("Green"))
+            return GREEN_CAPITOL;
+        else if(color.equals("Pink"))
+            return PINK_CAPITOL;
+        else if(color.equals("Red"))
+            return RED_CAPITOL;
+        else if(color.equals("Sea"))
+            return SEA_CAPITOL;
+        else if(color.equals("Yellow"))
+            return YELLOW_CAPITOL;
+
+        return "this is not supported color";
+    }
+
     public static String getRaceName(int raceID){
         if(raceID == RACE_ID)
             return "RACE";
@@ -137,6 +156,19 @@ public class UnitConstants {
             return "ORCS";
 
         return "Not compatible rrace";
+    }
+
+    public static int getIDFromRaceName(String raceName){
+        if(raceName.equals("Race"))
+            return RACE_ID;
+        else if(raceName.equals("People"))
+            return PEOPLE_ID;
+        else if(raceName.equals("Elves"))
+            return ELVES_ID;
+        else if(raceName.equals("Orcs"))
+            return ORCS_ID;
+
+        return 0;
     }
 
     /*

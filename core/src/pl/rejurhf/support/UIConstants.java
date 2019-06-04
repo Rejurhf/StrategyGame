@@ -29,6 +29,9 @@ public class UIConstants {
     private static TextureRegionDrawable nextButton10xDownAlt;
 
 
+    private static Skin skin;
+
+
     public static TextureRegionDrawable getDrawable(String imageName){
         if(imageName.equals(NEXT_BUTTON_UP)) {
             return getDrawable(imageName, nextButtonUp);
@@ -62,7 +65,8 @@ public class UIConstants {
     }
 
     public static Skin getDefaultSkin() {
-        Skin skin = new Skin(Gdx.files.internal("default\\uiskin.json"));
+        if(skin == null)
+            skin = new Skin(Gdx.files.internal("default\\uiskin.json"));
         return skin;
     }
 
