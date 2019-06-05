@@ -54,33 +54,15 @@ public class GameplayScreen extends AbstractScreen {
         initNextRoundButtons();
         initAutoplay();
         initTable();
+
+        initBackButton();
     }
 
 
-    private void initAutoplay() {
-        CustomLabel autoplayLabel = new CustomLabel("Autoplay:", 1440, 170);
-        autoplayCheckBox = new CustomCheckBox("", 1520, 170);
-        CustomLabel speedLabel = new CustomLabel("Speed:", 1610, 170);
-        speedTextField = new CustomTextField("", 1680, 170);
-        speedTextField.setTextFieldListener(new TextField.TextFieldListener() {
-            @Override
-            public void keyTyped(TextField textField, char c) {
-                // get interval
-                try{
-                    interval = Integer.parseInt(speedTextField.getText());
-                } catch (NumberFormatException e) {
-                    System.out.println("Interval must be integer");
-                }
+    private void initLabels() {
+        roundInfoLabel = new CustomLabel("Round 0", 1430, 950);
 
-                if(interval < 0 || interval > 120)
-                    interval = 30;
-            }
-        });
-
-        stage.addActor(autoplayLabel);
-        stage.addActor(autoplayCheckBox);
-        stage.addActor(speedLabel);
-        stage.addActor(speedTextField);
+        stage.addActor(roundInfoLabel);
     }
 
 
@@ -88,7 +70,7 @@ public class GameplayScreen extends AbstractScreen {
         raceLabelList = new ArrayList<Label>();
 
         Table unitInfoTable = new Table();
-        unitInfoTable.setPosition(1420, 330);
+        unitInfoTable.setPosition(1420, 400);
         unitInfoTable.setSize(338, 300);
 
         // Header
@@ -128,16 +110,36 @@ public class GameplayScreen extends AbstractScreen {
     }
 
 
-    private void initLabels() {
-        roundInfoLabel = new CustomLabel("Round 0", 1430, 950);
+    private void initAutoplay() {
+        CustomLabel autoplayLabel = new CustomLabel("Autoplay:", 1440, 240);
+        autoplayCheckBox = new CustomCheckBox("", 1520, 240);
+        CustomLabel speedLabel = new CustomLabel("Speed:", 1610, 240);
+        speedTextField = new CustomTextField("", 1680, 240);
+        speedTextField.setTextFieldListener(new TextField.TextFieldListener() {
+            @Override
+            public void keyTyped(TextField textField, char c) {
+                // get interval
+                try{
+                    interval = Integer.parseInt(speedTextField.getText());
+                } catch (NumberFormatException e) {
+                    System.out.println("Interval must be integer");
+                }
 
-        stage.addActor(roundInfoLabel);
+                if(interval < 0 || interval > 120)
+                    interval = 30;
+            }
+        });
+
+        stage.addActor(autoplayLabel);
+        stage.addActor(autoplayCheckBox);
+        stage.addActor(speedLabel);
+        stage.addActor(speedTextField);
     }
 
 
     private void initNextRoundButtons() {
         CustomTextButton nextRoundButton = new CustomTextButton("Next Round",
-                1425, 100, new IClickCallback() {
+                1425, 170, new IClickCallback() {
             @Override
             public void onClick() {
                 playNextRound();
@@ -146,7 +148,7 @@ public class GameplayScreen extends AbstractScreen {
 
 
         CustomTextButton nextRound5Button = new CustomTextButton("5x Next Round",
-                1603, 100, new IClickCallback() {
+                1603, 170, new IClickCallback() {
             @Override
             public void onClick() {
                 for (int i = 0; i < 5; ++i) {
@@ -156,7 +158,7 @@ public class GameplayScreen extends AbstractScreen {
         });
 
         CustomTextButton nextRound10Button = new CustomTextButton("10x Next Round",
-                1425, 30, new IClickCallback() {
+                1425, 100, new IClickCallback() {
             @Override
             public void onClick() {
                 for (int i = 0; i < 10; ++i) {
@@ -166,7 +168,7 @@ public class GameplayScreen extends AbstractScreen {
         });
 
         CustomTextButton nextRound20Button = new CustomTextButton("20x Next Round",
-                1603, 30, new IClickCallback() {
+                1603, 100, new IClickCallback() {
             @Override
             public void onClick() {
                 for (int i = 0; i < 20; ++i) {
@@ -179,6 +181,19 @@ public class GameplayScreen extends AbstractScreen {
         stage.addActor(nextRound5Button);
         stage.addActor(nextRound10Button);
         stage.addActor(nextRound20Button);
+    }
+
+
+    private void initBackButton() {
+        CustomTextButton backButton = new CustomTextButton("Back to menu",
+                1425, 30, 328, 50, new IClickCallback() {
+            @Override
+            public void onClick() {
+                game.setScreen(new InitialScreen(game));
+            }
+        });
+
+        stage.addActor(backButton);
     }
 
 
@@ -248,6 +263,7 @@ public class GameplayScreen extends AbstractScreen {
     }
 
     // Board initialization
+
     private void initBoard(String mapName) {
         unitsList = new ArrayList<UnitInstance>();
         // Array for strategy purpose
@@ -297,14 +313,13 @@ public class GameplayScreen extends AbstractScreen {
         }
     }
 
-
     // set background
+
     private void initBg() {
         Image bgImg = new Image(new Texture("bg\\game_screen_bg.png"));
         bgImg.setSize(StrategyGame.WIDTH, StrategyGame.HEIGHT);
         stage.addActor(bgImg);
     }
-
 
     private void autoplay(){
         ++updateCounter;

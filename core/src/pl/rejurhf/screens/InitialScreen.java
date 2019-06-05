@@ -1,5 +1,6 @@
 package pl.rejurhf.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -57,6 +58,7 @@ public class InitialScreen extends AbstractScreen {
         initLoadPresetsButton();
         initSubmitButton();
         initCreditsButton();
+        initEndButton();
     }
 
     private void initWarningDialog() {
@@ -402,6 +404,19 @@ public class InitialScreen extends AbstractScreen {
                 });
 
         stage.addActor(creditsButton);
+    }
+
+
+    private void initEndButton(){
+        CustomTextButton endButton = new CustomTextButton("End Game",
+                20, 20, new IClickCallback() {
+            @Override
+            public void onClick() {
+                Gdx.app.exit();
+            }
+        });
+
+        stage.addActor(endButton);
     }
 
 
