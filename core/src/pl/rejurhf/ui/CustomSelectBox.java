@@ -7,13 +7,16 @@ public class CustomSelectBox extends SelectBox {
     public CustomSelectBox(int xPos, int yPos, String[] items){
         super(UIConstants.getDefaultSkin());
 
-        init(xPos, yPos, items);
-    }
-
-    private void init(int xPos, int yPos, String[] items) {
-
         this.setItems(items);
         this.setSize(100, 30);
+        this.setPosition(xPos, yPos);
+    }
+
+    public CustomSelectBox(int xPos, int yPos, int width, int height, String[] items){
+        super(UIConstants.getDefaultSkin());
+
+        this.setItems(items);
+        this.setSize(width, height);
         this.setPosition(xPos, yPos);
     }
 }

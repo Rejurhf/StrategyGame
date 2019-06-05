@@ -2,7 +2,7 @@ package pl.rejurhf.entities;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import pl.rejurhf.StrategyGame;
-import pl.rejurhf.screens.GamePlayScreen;
+import pl.rejurhf.screens.GameplayScreen;
 import pl.rejurhf.support.UnitConstants;
 
 public class UnitInstance extends Image {
@@ -16,8 +16,13 @@ public class UnitInstance extends Image {
     private int STARTING_Y;
     public UnitInstance(int x, int y, int id){
         super(UnitConstants.getEmptySpaceTexture());
+        if(id == UnitConstants.EMPTY_SPACE_ID){
+            STATUS_ID = 0;
 
-        STATUS_ID = 0;
+        }else if(id == UnitConstants.MOUNTAIN_ID){
+            STATUS_ID = -1;
+            this.setDrawable(UnitConstants.getDrawable(UnitConstants.MOUNTAIN));
+        }
 
         this.setOrigin(WIDTH/2, HEIGHT/2);
         this.setSize(WIDTH, HEIGHT);
@@ -31,7 +36,7 @@ public class UnitInstance extends Image {
     public void changeSide(int id, String capitolColor){
         // Change status in strategy array and in instance
         STATUS_ID = id;
-        GamePlayScreen.strategyArray[getYIndex()][getXIndex()] = id;
+        GameplayScreen.strategyArray[getYIndex()][getXIndex()] = id;
 
         String unitColor = "";
         if(id == -1)

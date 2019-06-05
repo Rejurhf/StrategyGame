@@ -12,10 +12,14 @@ import pl.rejurhf.support.UIConstants;
 import pl.rejurhf.support.UnitConstants;
 import pl.rejurhf.ui.*;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GamePlayScreen extends AbstractScreen {
+public class GameplayScreen extends AbstractScreen {
     private static List<UnitInstance> unitsList;
     public static List<Race> raceList;
     public static List<Label> raceLabelList;
@@ -30,16 +34,20 @@ public class GamePlayScreen extends AbstractScreen {
     private CustomLabel roundInfoLabel;
 
 
-    GamePlayScreen(StrategyGame game, ArrayList<Integer> capitolList, ArrayList<String> raceColors,
-                   ArrayList<Integer> raceIDList){
+    GameplayScreen(StrategyGame game, ArrayList<Integer> capitolList, ArrayList<String> raceColors,
+                   ArrayList<Integer> raceIDList, String mapName){
         super(game);
-        init(capitolList, raceColors, raceIDList);
+        init(capitolList, raceColors, raceIDList, mapName);
     }
 
 
-    private void init(ArrayList<Integer> capitolList, ArrayList<String> raceColors, ArrayList<Integer> raceIDList) {
+    private void init(ArrayList<Integer> capitolList, ArrayList<String> raceColors,
+                      ArrayList<Integer> raceIDList, String mapName) {
         initBg();
-        initBoard();
+        if(mapName.equals(""))
+            initBoard();
+        else
+            initBoard(mapName);
         initRace(capitolList, raceColors, raceIDList);
 
         initLabels();
@@ -80,7 +88,7 @@ public class GamePlayScreen extends AbstractScreen {
         raceLabelList = new ArrayList<Label>();
 
         Table unitInfoTable = new Table();
-        unitInfoTable.setPosition(1420, 230);
+        unitInfoTable.setPosition(1420, 330);
         unitInfoTable.setSize(338, 300);
 
         // Header
@@ -235,6 +243,56 @@ public class GamePlayScreen extends AbstractScreen {
 
                 // 50-i cause 50th element on screen (top left) is first element in array (top left)
                 strategyArray[i][j] = 0;
+            }
+        }
+    }
+
+    // Board initialization
+    private void initBoard(String mapName) {
+        unitsList = new ArrayList<UnitInstance>();
+        // Array for strategy purpose
+        strategyArray = new int[StrategyGame.BOARD_HEIGHT][StrategyGame.BOARD_WIDTH];
+
+        // BufferedImage to get map from
+        BufferedImage map = null;
+        try{
+            map = ImageIO.read(new File("maps\\" + mapName));
+        } catch (IOException e) {
+            System.out.println("No such image");
+            initBoard();
+        }
+
+        if(map.getWidth() < 70 || map.getHeight() < 50)
+            initBoard();
+
+        // flip image
+        for (int i=0;i<map.getWidth();i++)
+            for (int j=0;j<map.getHeight()/2;j++)
+            {
+                int tmp = map.getRGB(i, j);
+                map.setRGB(i, j, map.getRGB(i, map.getHeight()-j-1));
+                map.setRGB(i, map.getHeight()-j-1, tmp);
+            }
+
+
+        // Populate board, i and j inverted due to more logic insertion to ArrayList
+        // (starting in left top corner, ending in right bottom corner, going row by row)
+        for (int i = 0; i < StrategyGame.BOARD_HEIGHT; i++) {
+            for (int j = 0; j < StrategyGame.BOARD_WIDTH; j++) {
+                UnitInstance newUnit;
+                // Create default instances of empty space (id = 0) and mountain (id = -1)
+                // 50-i cause 50th element on screen (top left) is first element in array (top left)
+                if(map.getRGB(j, i) > -8388608){
+                    strategyArray[i][j] = 0;
+                    newUnit = new UnitInstance(j*StrategyGame.UNIT_LEN, i*StrategyGame.UNIT_LEN, 0);
+                }else{
+                    strategyArray[i][j] = -1;
+                    newUnit = new UnitInstance(j*StrategyGame.UNIT_LEN, i*StrategyGame.UNIT_LEN, -1);
+                }
+                unitsList.add(newUnit);
+                stage.addActor(unitsList.get(unitsList.size() - 1));
+
+
             }
         }
     }

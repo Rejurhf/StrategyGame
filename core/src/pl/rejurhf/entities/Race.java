@@ -2,7 +2,7 @@ package pl.rejurhf.entities;
 
 import javafx.util.Pair;
 import pl.rejurhf.StrategyGame;
-import pl.rejurhf.screens.GamePlayScreen;
+import pl.rejurhf.screens.GameplayScreen;
 import pl.rejurhf.support.PositionPair;
 import pl.rejurhf.support.UnitConstants;
 
@@ -123,22 +123,22 @@ public class Race {
         // Console and user info text
         if(raceUnitsList.size() == 0){
             System.out.println(ID + " Race " + getRaceName() + " " + getRaceColor() + " is dead");
-            GamePlayScreen.raceLabelList.get(unitIDInLabelList).setText("Dead");
-            GamePlayScreen.raceLabelList.get(unitIDInLabelList+1).setText("Dead");
+            GameplayScreen.raceLabelList.get(unitIDInLabelList).setText("Dead");
+            GameplayScreen.raceLabelList.get(unitIDInLabelList+1).setText("Dead");
         }else{
             if(!hasCapitol) {
                 System.out.print("No capitol ");
-                GamePlayScreen.raceLabelList.get(unitIDInLabelList).setText(
+                GameplayScreen.raceLabelList.get(unitIDInLabelList).setText(
                         "No capitol\n" + raceUnitsList.size() + "\n" + breedingAbility);
             }else{
-                GamePlayScreen.raceLabelList.get(unitIDInLabelList).setText(
+                GameplayScreen.raceLabelList.get(unitIDInLabelList).setText(
                         raceUnitsList.size() + "\n" + breedingAbility);
             }
 
             System.out.println(ID + " " + UnitConstants.getRaceName(RACE_TYPE) + " " +
                     getRaceColor() + ": Moves: " + possibleMoves.size() + " War moves: " +
                     possibleWarMoves.size() + " Breeding: " + breedingAbility + " Units: " + raceUnitsList.size());
-            GamePlayScreen.raceLabelList.get(unitIDInLabelList+1).setText(
+            GameplayScreen.raceLabelList.get(unitIDInLabelList+1).setText(
                     possibleMoves.size() + "\n" + possibleWarMoves.size());
 
         }
@@ -232,7 +232,7 @@ public class Race {
     void assignToArray(PositionPair testedPosition, List<PositionPair> possibleMoves,
                                LinkedList<Pair<Integer, PositionPair>> possibleWarMoves,
                                Queue<PositionPair> unitsToVisit, List<PositionPair> visitedUnits) {
-        int testedId = GamePlayScreen.strategyArray[testedPosition.Y][testedPosition.X];
+        int testedId = GameplayScreen.strategyArray[testedPosition.Y][testedPosition.X];
 
         if(testedId == UnitConstants.MOUNTAIN_ID){
             return;
@@ -273,7 +273,7 @@ public class Race {
         while (unitsToClaim.size() > 0){
             PositionPair claimingUnit = unitsToClaim.remove(unitsToClaim.size()-1);
             int indexNumber = claimingUnit.Y * StrategyGame.BOARD_WIDTH + claimingUnit.X;
-            int unitID = GamePlayScreen.strategyArray[claimingUnit.Y][claimingUnit.X];
+            int unitID = GameplayScreen.strategyArray[claimingUnit.Y][claimingUnit.X];
 
             if(unitID == 0){
                 // Claim empty space
@@ -284,7 +284,7 @@ public class Race {
                 // if battle is won claim position and if this is an enemy
                 if(isVictoryAchieved(unitsList.get(indexNumber)) && enemyList.contains(unitID)){
                     // ((unitID+1)/2)-1 eq. (7+1/2-1)=3 which is index in list
-                    GamePlayScreen.raceList.get(((unitID+1)/2)-1).loseUnit(unitsList.get(indexNumber), ID);
+                    GameplayScreen.raceList.get(((unitID+1)/2)-1).loseUnit(unitsList.get(indexNumber), ID);
                     unitsList.get(indexNumber).changeSide(ID+1, COLOR);
                     raceUnitsList.add(unitsList.get(indexNumber));
                 }
@@ -292,7 +292,7 @@ public class Race {
                 // Claim enemy capitol if this is an enemy, battle is won and you are lucky
                 if(enemyList.contains(unitID) && isVictoryAchieved(unitsList.get(indexNumber)) && capitolClaimingLuck()){
                     // ((unitID+1)/2)-1 eq. (7+1/2-1)=3 which is index in list
-                    GamePlayScreen.raceList.get(((unitID+1)/2)-1).loseUnit(unitsList.get(indexNumber), ID);
+                    GameplayScreen.raceList.get(((unitID+1)/2)-1).loseUnit(unitsList.get(indexNumber), ID);
                     unitsList.get(indexNumber).changeSide(ID+1, COLOR);
                     raceUnitsList.add(unitsList.get(indexNumber));
                 }
@@ -330,7 +330,7 @@ public class Race {
 
     private void loseUnit(UnitInstance unit, int enemyID){
         // if capitol lose capitol
-        if(GamePlayScreen.strategyArray[unit.getYIndex()][unit.getXIndex()] == ID){
+        if(GameplayScreen.strategyArray[unit.getYIndex()][unit.getXIndex()] == ID){
             hasCapitol = false;
             unit.loseCapitolStatus();
         }
@@ -363,13 +363,13 @@ public class Race {
 
     private boolean isVictoryAchieved(UnitInstance claimingUnit){
 //        int indexNumber = claimingUnit.getYIndex() * StrategyGame.BOARD_WIDTH + claimingUnit.getXIndex();
-        int unitID = GamePlayScreen.strategyArray[claimingUnit.getYIndex()][claimingUnit.getXIndex()];
+        int unitID = GameplayScreen.strategyArray[claimingUnit.getYIndex()][claimingUnit.getXIndex()];
 
         // ((unitID+1)/2)-1 eq. (7+1/2-1)=3 which is index in list
         int raceIndexInList = ((unitID+1)/2)-1;
 
         // calculate distance from capitol and divide it by max distance square root/
-        int enemyPower = GamePlayScreen.raceList.get(raceIndexInList).calculateUnitPower(claimingUnit);
+        int enemyPower = GameplayScreen.raceList.get(raceIndexInList).calculateUnitPower(claimingUnit);
         int thisUnitPower = this.calculateUnitPower(claimingUnit);
 
         Random rand = new Random();

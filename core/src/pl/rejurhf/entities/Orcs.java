@@ -12,7 +12,7 @@ public class Orcs extends Race {
         this.toSpawnCapitolCount = spawnCapitolConst;
         this.breedingFromUnitConst = 25;
         this.breedingFromCapitolConst = 3;
-        this.unitPowerConst = 14;
+        this.unitPowerConst = 13;
         this.isPowerFromCapitolDependent = true;
 
         this.createEnemyList();

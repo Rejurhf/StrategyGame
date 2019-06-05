@@ -10,6 +10,7 @@ import pl.rejurhf.support.UIConstants;
 import pl.rejurhf.support.UnitConstants;
 import pl.rejurhf.ui.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -27,6 +28,8 @@ public class InitialScreen extends AbstractScreen {
 
     private int startXPosOfSettings;
     private int startYPosOfSettings;
+
+    private CustomSelectBox mapSelectBox;
 
     public InitialScreen(final StrategyGame game){
         super(game);
@@ -46,6 +49,7 @@ public class InitialScreen extends AbstractScreen {
         initTextFieldXPos();
         initTextFieldYPos();
         initButtonRandomPos();
+        initDropDownMap();
 
         initInfoLabel();
         initWarningDialog();
@@ -61,10 +65,10 @@ public class InitialScreen extends AbstractScreen {
         warningDialog.button("OK", true); //sends "true" as the result
     }
 
+
     /*
     Menu
      */
-
     private void initInfoLabel() {
         infoLabel = new CustomLabel("", 1500, 200);
 
@@ -180,6 +184,35 @@ public class InitialScreen extends AbstractScreen {
         }
     }
 
+    private void initDropDownMap() {
+        CustomLabel mapLabel = new CustomLabel("Maps:",
+                startXPosOfSettings + 620, startYPosOfSettings - 5);
+
+        // Fill maps array
+        List<String> maps = new ArrayList<String>();
+        maps.add("");
+
+        File folder = new File("maps");
+        File[] listOfFiles = folder.listFiles();
+
+        assert listOfFiles != null;
+        for (File listOfFile : listOfFiles) {
+            if (listOfFile.isFile()) {
+                String fileName = listOfFile.getName();
+                String substringName = fileName.substring(fileName.length() - 3);
+                if(substringName.equals("png") || substringName.equals("jpg"))
+                    maps.add(listOfFile.getName());
+            }
+        }
+
+
+        mapSelectBox = new CustomSelectBox(startXPosOfSettings + 620, startYPosOfSettings - 40,
+                150, 30, maps.toArray(new String[0]));
+
+        stage.addActor(mapLabel);
+        stage.addActor(mapSelectBox);
+    }
+
     /*
     Buttons control
      */
@@ -194,11 +227,11 @@ public class InitialScreen extends AbstractScreen {
         assignPresets(capitolList, colorList, raceIDList);
 
         CustomTextButton loadPresetsButton = new CustomTextButton("Use presets",
-                startXPosOfSettings + 620, startYPosOfSettings - 50, new IClickCallback() {
+                startXPosOfSettings + 620, startYPosOfSettings - 110, new IClickCallback() {
             @Override
             public void onClick() {
                 System.out.println("Submit presets");
-                game.setScreen(new GamePlayScreen(game, capitolList, colorList, raceIDList));
+                game.setScreen(new GameplayScreen(game, capitolList, colorList, raceIDList, ""));
             }
         });
 
@@ -229,7 +262,7 @@ public class InitialScreen extends AbstractScreen {
 
     private void initSubmitButton() {
         CustomTextButton submitButton = new CustomTextButton("Submit",
-                startXPosOfSettings + 620, startYPosOfSettings - 120, new IClickCallback() {
+                startXPosOfSettings + 620, startYPosOfSettings - 180, new IClickCallback() {
                     @Override
                     public void onClick() {
                         if(!validateInput())
@@ -243,7 +276,8 @@ public class InitialScreen extends AbstractScreen {
 
                         System.out.println("Submit");
 
-                        game.setScreen(new GamePlayScreen(game, capitolList, colorList, raceIDList));
+                        game.setScreen(new GameplayScreen(game,
+                                capitolList, colorList, raceIDList, mapSelectBox.getSelected().toString()));
                     }
                 });
 
@@ -351,7 +385,7 @@ public class InitialScreen extends AbstractScreen {
 
     private void initCreditsButton() {
         CustomTextButton creditsButton = new CustomTextButton("Credits",
-                startXPosOfSettings + 620, startYPosOfSettings - 190, new IClickCallback() {
+                startXPosOfSettings + 620, startYPosOfSettings - 250, new IClickCallback() {
                     @Override
                     public void onClick() {
                         System.out.println("Credits");
@@ -369,6 +403,7 @@ public class InitialScreen extends AbstractScreen {
 
         stage.addActor(creditsButton);
     }
+
 
     // set background
     private void initBg() {

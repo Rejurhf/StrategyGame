@@ -1,7 +1,7 @@
 package pl.rejurhf.entities;
 
 import javafx.util.Pair;
-import pl.rejurhf.screens.GamePlayScreen;
+import pl.rejurhf.screens.GameplayScreen;
 import pl.rejurhf.support.PositionPair;
 import pl.rejurhf.support.UnitConstants;
 
@@ -21,7 +21,7 @@ public class People extends Race {
         this.toSpawnCapitolCount = spawnCapitolConst;
         this.breedingFromUnitConst = 10;
         this.breedingFromCapitolConst = 1;
-        this.unitPowerConst = 1;
+        this.unitPowerConst = 2;
         this.isPowerFromCapitolDependent = true;
         this.isNothingToTake = false;
     }
@@ -69,7 +69,7 @@ public class People extends Race {
     @Override
     void assignToArray(PositionPair testedPosition, List<PositionPair> possibleMoves, LinkedList<Pair<Integer, PositionPair>> possibleWarMoves, Queue<PositionPair> unitsToVisit, List<PositionPair> visitedUnits) {
 //        super.assignToArray(testedPosition, possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
-        int testedId = GamePlayScreen.strategyArray[testedPosition.Y][testedPosition.X];
+        int testedId = GameplayScreen.strategyArray[testedPosition.Y][testedPosition.X];
 
         if(testedId == UnitConstants.MOUNTAIN_ID){
             return;
