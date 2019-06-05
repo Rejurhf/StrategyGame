@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 import pl.rejurhf.StrategyGame;
 import pl.rejurhf.entities.*;
@@ -19,7 +20,11 @@ public class GamePlayScreen extends AbstractScreen {
     public static List<Race> raceList;
     public static List<Label> raceLabelList;
     public static int[][] strategyArray;
-    private Table unitInfoTable;
+
+    private CustomTextField speedTextField;
+    private CustomCheckBox autoplayCheckBox;
+    private int interval = 30;
+    private int updateCounter = 0;
 
     private int roundCounter = 0;
     private CustomLabel roundInfoLabel;
@@ -39,16 +44,46 @@ public class GamePlayScreen extends AbstractScreen {
 
         initLabels();
         initNextRoundButtons();
+        initAutoplay();
         initTable();
     }
+
+
+    private void initAutoplay() {
+        CustomLabel autoplayLabel = new CustomLabel("Autoplay:", 1440, 170);
+        autoplayCheckBox = new CustomCheckBox("", 1520, 170);
+        CustomLabel speedLabel = new CustomLabel("Speed:", 1610, 170);
+        speedTextField = new CustomTextField("", 1680, 170);
+        speedTextField.setTextFieldListener(new TextField.TextFieldListener() {
+            @Override
+            public void keyTyped(TextField textField, char c) {
+                // get interval
+                try{
+                    interval = Integer.parseInt(speedTextField.getText());
+                } catch (NumberFormatException e) {
+                    System.out.println("Interval must be integer");
+                }
+
+                if(interval < 0 || interval > 120)
+                    interval = 30;
+            }
+        });
+
+        stage.addActor(autoplayLabel);
+        stage.addActor(autoplayCheckBox);
+        stage.addActor(speedLabel);
+        stage.addActor(speedTextField);
+    }
+
 
     private void initTable() {
         raceLabelList = new ArrayList<Label>();
 
-        unitInfoTable = new Table();
-        unitInfoTable.setPosition(1420, 200);
+        Table unitInfoTable = new Table();
+        unitInfoTable.setPosition(1420, 230);
         unitInfoTable.setSize(338, 300);
 
+        // Header
         Label topInfoLabel = new Label("ID\nRaace\nColor", UIConstants.getDefaultSkin());
         topInfoLabel.setAlignment(Align.center);
         Label topUnitLabel = new Label("Units\nBreeding", UIConstants.getDefaultSkin());
@@ -60,6 +95,7 @@ public class GamePlayScreen extends AbstractScreen {
         unitInfoTable.add(topUnitLabel).expandX();
         unitInfoTable.add(topMoveLabel).expandX();
 
+        // init content
         for (int i = 0; i < UnitConstants.numberOfRaces; i++) {
             unitInfoTable.row();
 
@@ -83,15 +119,17 @@ public class GamePlayScreen extends AbstractScreen {
         stage.addActor(unitInfoTable);
     }
 
+
     private void initLabels() {
         roundInfoLabel = new CustomLabel("Round 0", 1430, 950);
 
         stage.addActor(roundInfoLabel);
     }
 
+
     private void initNextRoundButtons() {
         CustomTextButton nextRoundButton = new CustomTextButton("Next Round",
-                1425, 120, new IClickCallback() {
+                1425, 100, new IClickCallback() {
             @Override
             public void onClick() {
                 playNextRound();
@@ -100,7 +138,7 @@ public class GamePlayScreen extends AbstractScreen {
 
 
         CustomTextButton nextRound5Button = new CustomTextButton("5x Next Round",
-                1603, 120, new IClickCallback() {
+                1603, 100, new IClickCallback() {
             @Override
             public void onClick() {
                 for (int i = 0; i < 5; ++i) {
@@ -110,7 +148,7 @@ public class GamePlayScreen extends AbstractScreen {
         });
 
         CustomTextButton nextRound10Button = new CustomTextButton("10x Next Round",
-                1425, 50, new IClickCallback() {
+                1425, 30, new IClickCallback() {
             @Override
             public void onClick() {
                 for (int i = 0; i < 10; ++i) {
@@ -120,7 +158,7 @@ public class GamePlayScreen extends AbstractScreen {
         });
 
         CustomTextButton nextRound20Button = new CustomTextButton("20x Next Round",
-                1603, 50, new IClickCallback() {
+                1603, 30, new IClickCallback() {
             @Override
             public void onClick() {
                 for (int i = 0; i < 20; ++i) {
@@ -209,6 +247,16 @@ public class GamePlayScreen extends AbstractScreen {
         stage.addActor(bgImg);
     }
 
+
+    private void autoplay(){
+        ++updateCounter;
+
+        if(updateCounter > interval){
+            playNextRound();
+            updateCounter = 0;
+        }
+    }
+
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -221,6 +269,10 @@ public class GamePlayScreen extends AbstractScreen {
 
     private void update() {
         stage.act();
+
+        if(autoplayCheckBox.isChecked()){
+            autoplay();
+        }
     }
 
     @Override

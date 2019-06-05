@@ -250,6 +250,7 @@ public class InitialScreen extends AbstractScreen {
         stage.addActor(submitButton);
     }
 
+
     private boolean validateInput(){
         List<String> tmpColorList = new ArrayList<String>();
         List<Integer> tmpPositionList = new ArrayList<Integer>();
@@ -327,6 +328,7 @@ public class InitialScreen extends AbstractScreen {
 
         return true;
     }
+
 
     private void assignInputToArrays(ArrayList<Integer> capitolList, ArrayList<String> colorList,
                                      ArrayList<Integer> raceIDList) {
