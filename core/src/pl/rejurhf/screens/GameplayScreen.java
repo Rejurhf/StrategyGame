@@ -11,42 +11,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameplayScreen extends AbstractScreen {
-    public static List<UnitInstance> unitsList;
+    private static List<UnitInstance> unitsList;
     public static List<Race> raceList;
     public static int[][] strategyArray;
     private int roundCounter = 0;
 
-    public GameplayScreen(StrategyGame game, ArrayList<Integer> capitolList, ArrayList<String> raceColors,
+
+    GameplayScreen(StrategyGame game, ArrayList<Integer> capitolList, ArrayList<String> raceColors,
                           ArrayList<Integer> raceIDList){
         super(game);
         init(capitolList, raceColors, raceIDList);
     }
 
+
     private void init(ArrayList<Integer> capitolList, ArrayList<String> raceColors, ArrayList<Integer> raceIDList) {
         initBg();
         initBoard();
         initRace(capitolList, raceColors, raceIDList);
-        initNextRoundButton();
-        initNextRound5Button();
-        initNextRound10Button();
+        initNextRoundButtons();
+
+//        initNextRoundButton();
+//        initNextRound5Button();
+//        initNextRound10Button();
     }
 
-    private void initNextRound10Button() {
-        CustomTextButton creditsButton = new CustomTextButton("10x Next Round",
-                1425, 250, new IClickCallback() {
+    private void initNextRoundButtons() {
+        CustomTextButton nextRoundButton = new CustomTextButton("Next Round",
+                1425, 390, new IClickCallback() {
             @Override
             public void onClick() {
-                for (int i = 0; i < 10; ++i) {
-                    playNextRound();
-                }
+                playNextRound();
             }
         });
 
-        stage.addActor(creditsButton);
-    }
 
-    private void initNextRound5Button() {
-        CustomTextButton creditsButton = new CustomTextButton("5x Next Round",
+        CustomTextButton nextRound5Button = new CustomTextButton("5x Next Round",
                 1425, 320, new IClickCallback() {
             @Override
             public void onClick() {
@@ -56,21 +55,24 @@ public class GameplayScreen extends AbstractScreen {
             }
         });
 
-        stage.addActor(creditsButton);
-    }
-
-    private void initNextRoundButton() {
-        CustomTextButton creditsButton = new CustomTextButton("Next Round",
-                1425, 390, new IClickCallback() {
+        CustomTextButton nextRound10Button = new CustomTextButton("10x Next Round",
+                1425, 250, new IClickCallback() {
             @Override
             public void onClick() {
-                playNextRound();
+                for (int i = 0; i < 10; ++i) {
+                    playNextRound();
+                }
             }
         });
 
-        stage.addActor(creditsButton);
+
+
+        stage.addActor(nextRoundButton);
+        stage.addActor(nextRound5Button);
+        stage.addActor(nextRound10Button);
     }
 
+    
     private void playNextRound(){
         System.out.println("\nRound: " + ++roundCounter);
         for(Race race : raceList){
@@ -80,6 +82,7 @@ public class GameplayScreen extends AbstractScreen {
             race.executeMovePlan(unitsList);
         }
     }
+
 
     private void initRace(ArrayList<Integer> capitolList, ArrayList<String> raceColors, ArrayList<Integer> raceIDList) {
         raceList = new ArrayList<Race>();
@@ -110,6 +113,7 @@ public class GameplayScreen extends AbstractScreen {
             raceList.add(newRace);
         }
     }
+
 
     // Board initialization
     private void initBoard() {
