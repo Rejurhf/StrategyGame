@@ -2,9 +2,11 @@ package pl.rejurhf.screens;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import pl.rejurhf.StrategyGame;
+import pl.rejurhf.support.UIConstants;
 import pl.rejurhf.support.UnitConstants;
 import pl.rejurhf.ui.*;
 
@@ -20,6 +22,9 @@ public class InitialScreen extends AbstractScreen {
     private List<CustomTextField> textInputYPosList;
     private List<CustomTextButton> buttonRandomPosList;
 
+    private CustomLabel infoLabel;
+    private Dialog warningDialog;
+
     private int startXPosOfSettings;
     private int startYPosOfSettings;
 
@@ -30,7 +35,7 @@ public class InitialScreen extends AbstractScreen {
     @Override
     protected void init() {
         startXPosOfSettings = 100;
-        startYPosOfSettings = 900;
+        startYPosOfSettings = 875;
 
         initBg();
 
@@ -42,9 +47,31 @@ public class InitialScreen extends AbstractScreen {
         initTextFieldYPos();
         initButtonRandomPos();
 
+        initInfoLabel();
+        initWarningDialog();
+
         initLoadPresetsButton();
         initSubmitButton();
         initCreditsButton();
+    }
+
+    private void initWarningDialog() {
+        warningDialog = new Dialog("Warning", UIConstants.getDefaultSkin(), "dialog"){};
+
+//        warningDialog.text("Are you sure you want to quit?");
+        warningDialog.button("OK", true); //sends "true" as the result
+//        warningDialog.show(stage);
+//        warningDialog.hide();
+    }
+
+    /*
+    Menu
+     */
+
+    private void initInfoLabel() {
+        infoLabel = new CustomLabel("", 1500, 200);
+
+        stage.addActor(infoLabel);
     }
 
     private void initAddLabels() {
@@ -74,7 +101,7 @@ public class InitialScreen extends AbstractScreen {
 
         for (int i = 0; i < 6; ++i){
             final CustomCheckBox customCheckBox = new CustomCheckBox("",
-                    startXPosOfSettings, 900  - (50 * i));
+                    startXPosOfSettings, startYPosOfSettings  - (50 * i));
 
             checkBoxRaceList.add(customCheckBox);
             stage.addActor(customCheckBox);
@@ -156,6 +183,10 @@ public class InitialScreen extends AbstractScreen {
         }
     }
 
+    /*
+    Buttons control
+     */
+
     private void initLoadPresetsButton() {
         // Array with location on the board, color of races and races IDs
         final ArrayList<Integer> capitolList = new ArrayList<Integer>();
@@ -169,6 +200,7 @@ public class InitialScreen extends AbstractScreen {
                 startXPosOfSettings + 620, startYPosOfSettings - 50, new IClickCallback() {
             @Override
             public void onClick() {
+                System.out.println("Submit presets");
                 game.setScreen(new GameplayScreen(game, capitolList, colorList, raceIDList));
             }
         });
@@ -212,6 +244,8 @@ public class InitialScreen extends AbstractScreen {
                         final ArrayList<Integer> raceIDList = new ArrayList<Integer>();
                         assignInputToArrays(capitolList, colorList, raceIDList);
 
+                        System.out.println("Submit");
+
                         game.setScreen(new GameplayScreen(game, capitolList, colorList, raceIDList));
                     }
                 });
@@ -232,6 +266,10 @@ public class InitialScreen extends AbstractScreen {
                 // Can not use one color 2 times
                 if(tmpColorList.contains(selectBoxColorList.get(i).getSelected().toString())){
                     System.out.println("Row " + i + ": Can not use same color 2 times");
+
+                    warningDialog.getContentTable().clear();
+                    warningDialog.text("Row " + i + ": Can not use same color 2 times");
+                    warningDialog.show(stage);
                     return false;
                 }else
                     tmpColorList.add(selectBoxColorList.get(i).getSelected().toString());
@@ -242,10 +280,18 @@ public class InitialScreen extends AbstractScreen {
                     x = Integer.parseInt(textInputXPosList.get(i).getText());
                     y = Integer.parseInt(textInputYPosList.get(i).getText());
                 } catch(NumberFormatException e) {
-                    System.out.println("Row " + i + ": Position must be integer");
+                    System.out.println("Row " + i + ": Position X and Y must be integer");
+
+                    warningDialog.getContentTable().clear();
+                    warningDialog.text("Row " + i + ": Position X and Y must be integer");
+                    warningDialog.show(stage);
                     return false;
                 } catch(NullPointerException e) {
-                    System.out.println("Row " + i + ": Position must be integer Row: " + i);
+                    System.out.println("Row " + i + ": Position X and Y must be integer");
+
+                    warningDialog.getContentTable().clear();
+                    warningDialog.text("Row " + i + ": Position X and Y must be integer");
+                    warningDialog.show(stage);
                     return false;
                 }
 
@@ -253,9 +299,18 @@ public class InitialScreen extends AbstractScreen {
                 if(x < 0 || x > 69 || y < 0 || y > 49){
                     System.out.println("Row " + i +
                             ": Position X must be from range [0; 69] and Y must be from range [0; 49]");
+
+                    warningDialog.getContentTable().clear();
+                    warningDialog.text("Row " + i +
+                            ": Position X must be from range [0; 69] and Y must be from range [0; 49]");
+                    warningDialog.show(stage);
                     return false;
                 }else if(tmpPositionList.contains(y * StrategyGame.BOARD_WIDTH + x)){
                     System.out.println("Row " + i + ": Can not use same position 2 times");
+
+                    warningDialog.getContentTable().clear();
+                    warningDialog.text("Row " + i + ": Can not use same position 2 times");
+                    warningDialog.show(stage);
                     return false;
                 }else{
                     tmpPositionList.add(y * StrategyGame.BOARD_WIDTH + x);
@@ -266,6 +321,10 @@ public class InitialScreen extends AbstractScreen {
         // If there aren't any setup race
         if(countRaces == 0){
             System.out.println("At least one race must be set up");
+
+            warningDialog.getContentTable().clear();
+            warningDialog.text("At least one race must be set up");
+            warningDialog.show(stage);
             return false;
         }
 
@@ -297,6 +356,15 @@ public class InitialScreen extends AbstractScreen {
                     @Override
                     public void onClick() {
                         System.out.println("Credits");
+
+                        infoLabel.setText("Author\n" +
+                                "Mateusz Ziomek\n\n" +
+                                "Design support\n" +
+                                "Justyna Mikrut\n\n" +
+                                "Powered by\n" +
+                                "LibGDX\n\n" +
+                                "Images\n" +
+                                "freepik.com");
                     }
                 });
 
