@@ -2,7 +2,7 @@ package pl.rejurhf.entities;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import pl.rejurhf.StrategyGame;
-import pl.rejurhf.screens.GameplayScreen;
+import pl.rejurhf.screens.GamePlayScreen;
 import pl.rejurhf.support.UnitConstants;
 
 public class UnitInstance extends Image {
@@ -31,7 +31,7 @@ public class UnitInstance extends Image {
     public void changeSide(int id, String capitolColor){
         // Change status in strategy array and in instance
         STATUS_ID = id;
-        GameplayScreen.strategyArray[getYIndex()][getXIndex()] = id;
+        GamePlayScreen.strategyArray[getYIndex()][getXIndex()] = id;
 
         String unitColor = "";
         if(id == -1)

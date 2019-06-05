@@ -2,23 +2,31 @@ package pl.rejurhf.screens;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 import pl.rejurhf.StrategyGame;
 import pl.rejurhf.entities.*;
+import pl.rejurhf.support.UIConstants;
 import pl.rejurhf.support.UnitConstants;
 import pl.rejurhf.ui.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameplayScreen extends AbstractScreen {
+public class GamePlayScreen extends AbstractScreen {
     private static List<UnitInstance> unitsList;
     public static List<Race> raceList;
+    public static List<Label> raceLabelList;
     public static int[][] strategyArray;
+    private Table unitInfoTable;
+
     private int roundCounter = 0;
+    private CustomLabel roundInfoLabel;
 
 
-    GameplayScreen(StrategyGame game, ArrayList<Integer> capitolList, ArrayList<String> raceColors,
-                          ArrayList<Integer> raceIDList){
+    GamePlayScreen(StrategyGame game, ArrayList<Integer> capitolList, ArrayList<String> raceColors,
+                   ArrayList<Integer> raceIDList){
         super(game);
         init(capitolList, raceColors, raceIDList);
     }
@@ -28,16 +36,62 @@ public class GameplayScreen extends AbstractScreen {
         initBg();
         initBoard();
         initRace(capitolList, raceColors, raceIDList);
-        initNextRoundButtons();
 
-//        initNextRoundButton();
-//        initNextRound5Button();
-//        initNextRound10Button();
+        initLabels();
+        initNextRoundButtons();
+        initTable();
+    }
+
+    private void initTable() {
+        raceLabelList = new ArrayList<Label>();
+
+        unitInfoTable = new Table();
+        unitInfoTable.setPosition(1420, 200);
+        unitInfoTable.setSize(338, 300);
+
+        Label topInfoLabel = new Label("ID\nRaace\nColor", UIConstants.getDefaultSkin());
+        topInfoLabel.setAlignment(Align.center);
+        Label topUnitLabel = new Label("Units\nBreeding", UIConstants.getDefaultSkin());
+        topUnitLabel.setAlignment(Align.center);
+        Label topMoveLabel = new Label("Peace Moves\nWar Moves", UIConstants.getDefaultSkin());
+        topMoveLabel.setAlignment(Align.center);
+
+        unitInfoTable.add(topInfoLabel).expandX();
+        unitInfoTable.add(topUnitLabel).expandX();
+        unitInfoTable.add(topMoveLabel).expandX();
+
+        for (int i = 0; i < UnitConstants.numberOfRaces; i++) {
+            unitInfoTable.row();
+
+            int raceID = 2*i+1;
+            Label infoLabel = new Label(raceID + "\n" + raceList.get(i).getRaceName() + "\n" +
+                    raceList.get(i).getRaceColor(), UIConstants.getDefaultSkin());
+            infoLabel.setAlignment(Align.center);
+            Label unitsLabel = new Label("1\n4", UIConstants.getDefaultSkin());
+            unitsLabel.setAlignment(Align.center);
+            Label movesLabel = new Label("4\n0", UIConstants.getDefaultSkin());
+            movesLabel.setAlignment(Align.center);
+
+            raceLabelList.add(unitsLabel);
+            raceLabelList.add(movesLabel);
+
+            unitInfoTable.add(infoLabel);
+            unitInfoTable.add(unitsLabel);
+            unitInfoTable.add(movesLabel);
+        }
+
+        stage.addActor(unitInfoTable);
+    }
+
+    private void initLabels() {
+        roundInfoLabel = new CustomLabel("Round 0", 1430, 950);
+
+        stage.addActor(roundInfoLabel);
     }
 
     private void initNextRoundButtons() {
         CustomTextButton nextRoundButton = new CustomTextButton("Next Round",
-                1425, 390, new IClickCallback() {
+                1425, 120, new IClickCallback() {
             @Override
             public void onClick() {
                 playNextRound();
@@ -46,7 +100,7 @@ public class GameplayScreen extends AbstractScreen {
 
 
         CustomTextButton nextRound5Button = new CustomTextButton("5x Next Round",
-                1425, 320, new IClickCallback() {
+                1603, 120, new IClickCallback() {
             @Override
             public void onClick() {
                 for (int i = 0; i < 5; ++i) {
@@ -56,7 +110,7 @@ public class GameplayScreen extends AbstractScreen {
         });
 
         CustomTextButton nextRound10Button = new CustomTextButton("10x Next Round",
-                1425, 250, new IClickCallback() {
+                1425, 50, new IClickCallback() {
             @Override
             public void onClick() {
                 for (int i = 0; i < 10; ++i) {
@@ -65,16 +119,27 @@ public class GameplayScreen extends AbstractScreen {
             }
         });
 
-
+        CustomTextButton nextRound20Button = new CustomTextButton("20x Next Round",
+                1603, 50, new IClickCallback() {
+            @Override
+            public void onClick() {
+                for (int i = 0; i < 20; ++i) {
+                    playNextRound();
+                }
+            }
+        });
 
         stage.addActor(nextRoundButton);
         stage.addActor(nextRound5Button);
         stage.addActor(nextRound10Button);
+        stage.addActor(nextRound20Button);
     }
 
-    
+
     private void playNextRound(){
         System.out.println("\nRound: " + ++roundCounter);
+        roundInfoLabel.setText("Round " + roundCounter);
+
         for(Race race : raceList){
             race.planNextMove();
         }

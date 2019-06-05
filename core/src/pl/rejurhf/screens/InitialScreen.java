@@ -58,10 +58,7 @@ public class InitialScreen extends AbstractScreen {
     private void initWarningDialog() {
         warningDialog = new Dialog("Warning", UIConstants.getDefaultSkin(), "dialog"){};
 
-//        warningDialog.text("Are you sure you want to quit?");
         warningDialog.button("OK", true); //sends "true" as the result
-//        warningDialog.show(stage);
-//        warningDialog.hide();
     }
 
     /*
@@ -201,7 +198,7 @@ public class InitialScreen extends AbstractScreen {
             @Override
             public void onClick() {
                 System.out.println("Submit presets");
-                game.setScreen(new GameplayScreen(game, capitolList, colorList, raceIDList));
+                game.setScreen(new GamePlayScreen(game, capitolList, colorList, raceIDList));
             }
         });
 
@@ -246,7 +243,7 @@ public class InitialScreen extends AbstractScreen {
 
                         System.out.println("Submit");
 
-                        game.setScreen(new GameplayScreen(game, capitolList, colorList, raceIDList));
+                        game.setScreen(new GamePlayScreen(game, capitolList, colorList, raceIDList));
                     }
                 });
 

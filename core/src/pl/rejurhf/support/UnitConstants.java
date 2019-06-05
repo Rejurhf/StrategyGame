@@ -113,17 +113,17 @@ public class UnitConstants {
 
     public static String getColorName(String color){
         if(color.equals(BLUE_CAPITOL) || color.equals(BLUE_UNIT))
-            return "BLUE";
+            return "Blue";
         else if(color.equals(GREEN_CAPITOL) || color.equals(GREEN_UNIT))
-            return "GREEN";
+            return "Green";
         else if(color.equals(PINK_CAPITOL) || color.equals(PINK_UNIT))
-            return "PINK";
+            return "Pink";
         else if(color.equals(RED_CAPITOL) || color.equals(RED_UNIT))
-            return "RED";
+            return "Red";
         else if(color.equals(SEA_CAPITOL) || color.equals(SEA_UNIT))
-            return "SEA";
+            return "Sea";
         else if(color.equals(YELLOW_CAPITOL) || color.equals(YELLOW_UNIT))
-            return "YELLOW";
+            return "Yellow";
 
         return "this is not supported color";
     }
@@ -147,15 +147,15 @@ public class UnitConstants {
 
     public static String getRaceName(int raceID){
         if(raceID == RACE_ID)
-            return "RACE";
+            return "Race";
         else if(raceID == PEOPLE_ID)
-            return "PEOPLE";
+            return "People";
         else if(raceID == ELVES_ID)
-            return "ELVES";
+            return "Elves";
         else if(raceID == ORCS_ID)
-            return "ORCS";
+            return "Orcs";
 
-        return "Not compatible rrace";
+        return "Not compatible race";
     }
 
     public static int getIDFromRaceName(String raceName){

@@ -1,7 +1,7 @@
 package pl.rejurhf.entities;
 
 import javafx.util.Pair;
-import pl.rejurhf.screens.GameplayScreen;
+import pl.rejurhf.screens.GamePlayScreen;
 import pl.rejurhf.support.PositionPair;
 import pl.rejurhf.support.UnitConstants;
 
@@ -26,39 +26,9 @@ public class People extends Race {
         this.isNothingToTake = false;
     }
 
+
     @Override
-    public void planNextMove() {
-//        super.planNextMove();
-        // Get possible moves to empty spaces and to enemy units
-        LinkedList<PositionPair> possibleMoves = new LinkedList<PositionPair>();
-        LinkedList<Pair<Integer, PositionPair>> possibleWarMoves = new LinkedList<Pair<Integer, PositionPair>>();
-        assignPossibleMoves(possibleMoves, possibleWarMoves);
-
-        // Get breeding ability of race
-        int breedingAbility = 0;
-        if(hasCapitol) {
-            breedingAbility = (int) (raceUnitsList.size() / breedingFromUnitConst) + breedingFromCapitolConst;
-        }else if(raceUnitsList.size() > 10){
-            // if no capitol count to capitol rebuild
-            breedingAbility = (int) (raceUnitsList.size() / (2*breedingFromUnitConst));
-            toSpawnCapitolCount--;
-            if(toSpawnCapitolCount == 0){
-                this.makeNewCapitol();
-            }
-        }
-
-        // Info text
-        if(raceUnitsList.size() == 0){
-            System.out.println(ID + " Race " + UnitConstants.getRaceName(RACE_TYPE) + " " +
-                    UnitConstants.getColorName(COLOR) + " is dead");
-        }else{
-            if(!hasCapitol)
-                System.out.print("No capitol ");
-            System.out.println(ID + " " + UnitConstants.getRaceName(RACE_TYPE) + " " +
-                    UnitConstants.getColorName(COLOR) + ": Moves: " + possibleMoves.size() + " War moves: " +
-                    possibleWarMoves.size() + " Breeding: " + breedingAbility + " Units: " + raceUnitsList.size());
-        }
-
+    void choseUnitsToConcur(LinkedList<PositionPair> possibleMoves, LinkedList<Pair<Integer, PositionPair>> possibleWarMoves, int breedingAbility) {
         // If there is more neighboring empty spaces than breeding ability
         if(possibleMoves.size() >= breedingAbility){
             Random rand = new Random();
@@ -99,7 +69,7 @@ public class People extends Race {
     @Override
     void assignToArray(PositionPair testedPosition, List<PositionPair> possibleMoves, LinkedList<Pair<Integer, PositionPair>> possibleWarMoves, Queue<PositionPair> unitsToVisit, List<PositionPair> visitedUnits) {
 //        super.assignToArray(testedPosition, possibleMoves, possibleWarMoves, unitsToVisit, visitedUnits);
-        int testedId = GameplayScreen.strategyArray[testedPosition.Y][testedPosition.X];
+        int testedId = GamePlayScreen.strategyArray[testedPosition.Y][testedPosition.X];
 
         if(testedId == UnitConstants.MOUNTAIN_ID){
             return;
